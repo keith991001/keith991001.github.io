@@ -1,0 +1,26 @@
+title: Ke Yu
+description: Data Scientist & AI Researcher at The University of Tokyo
+url: "https://keith991001.github.io"
+baseurl: ""
+
+markdown: kramdown
+permalink: /thoughts/:year/:month/:title/
+
+collections:
+  bookmarks:
+    output: false
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+
+plugins:
+  - jekyll-seo-tag
