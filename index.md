@@ -60,3 +60,5 @@ title: About
     <span class="skill-tag">Linux</span>
   </div>
 </div>
+
+ {% include visitor-map.html %}
