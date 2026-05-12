@@ -1,73 +1,252 @@
   <div class="about-section">
     <h2>Recent Visitors</h2>
     <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">
-      Showing approximate city-level locations of recent visitors.
-      No IP addresses are stored; data auto-expires after 30 days.
+      Showing approximate city-level locations of visitors. No IP addresses are stored.
     </p>
-    <div id="visitor-map" style="height: 400px; border-radius: 8px; 
-  border: 1px solid #e5e5e5;"></div>
-    <p id="visitor-count" style="text-align: center; color: #999; 
-  font-size: 0.85rem; margin-top: 0.5rem;">
+
+    <div class="visitor-map-layout">
+      <div id="visitor-map"></div>
+      <aside class="visitor-stats">
+        <h3>By Country</h3>
+        <ul id="country-stats">
+          <li class="country-stats-empty">Loading…</li>
+        </ul>
+      </aside>
+    </div>
+
+    <p id="visitor-count" style="text-align: center; color: #999; font-size: 0.85rem; margin-top: 0.5rem;">
       Loading…
     </p>
   </div>
-  
-  <link rel="stylesheet" 
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script 
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+  <style>
+    /* —— 两栏布局：左地图、右国家统计 —— */
+    .visitor-map-layout {
+      display: flex;
+      gap: 1rem;
+      align-items: stretch;
+    }
+    .visitor-map-layout > #visitor-map {
+      flex: 3;
+      height: 400px;
+      border-radius: 8px;
+      border: 1px solid #e5e5e5;
+    }
+    .visitor-stats {
+      flex: 1;
+      min-width: 180px;
+      max-width: 260px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding-left: 0.5rem;
+    }
+    .visitor-stats h3 {
+      margin: 0 0 0.75rem;
+      font-size: 0.85rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+    #country-stats {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    #country-stats li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.35rem 0;
+      font-size: 0.9rem;
+    }
+    .country-flag {
+      font-size: 1.2rem;
+      margin-right: 0.5rem;
+    }
+    .country-name {
+      flex: 1;
+      color: #333;
+    }
+    .country-count {
+      color: #666;
+      font-variant-numeric: tabular-nums;
+      font-weight: 500;
+    }
+    .country-stats-empty {
+      color: #999;
+      justify-content: center !important;
+      border-bottom: none !important;
+    }
+
+    /* —— 自定义聚合气泡 —— */
+    .visitor-cluster {
+      background: transparent;
+      border: none;
+    }
+    .visitor-cluster-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, 0.85);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: transform 0.15s ease;
+    }
+    .visitor-cluster:hover .visitor-cluster-inner {
+      transform: scale(1.08);
+    }
+
+    /* —— 移动端：垂直堆叠 —— */
+    @media (max-width: 768px) {
+      .visitor-map-layout {
+        flex-direction: column;
+      }
+      .visitor-stats {
+        max-width: none;
+        height: auto;
+        max-height: 280px;
+      }
+    }
+  </style>
 
   <script>
   (function () {
-    const WORKER_URL =
-  'https://visitor-map-worker.keith991001.workers.dev';
+    const WORKER_URL = 'https://visitor-map-worker.keith991001.workers.dev';
 
-    // ① 上报"我来了"——不用等返回，失败也不影响地图展示
+    // ① 上报"我来了"
     fetch(WORKER_URL, { method: 'POST' }).catch(() => {});
-  
-    // ② 初始化地图（默认视角：世界地图，居中在赤道附近）
-    const map = L.map('visitor-map', { worldCopyJump: true
-  }).setView([20, 0], 2);
-  
-    // ③ 加底图（OpenStreetMap，免费、无 API key）
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      maxZoom: 18,
+
+    // ② 初始化地图
+    const map = L.map('visitor-map', {
+      worldCopyJump: true,
+      minZoom: 2,
+      maxBounds: [[-85, -180], [85, 180]],
+      maxBoundsViscosity: 0.8,
+    }).setView([20, 0], 2);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+      maxZoom: 20,
+      noWrap: true,
     }).addTo(map);
-  
-    // ④ 拉取最近访客 → 画到地图上
+
+    // —— 工具函数 ——
+
+    // 国家代码 → 国旗 emoji（如 "JP" → "🇯🇵"）
+    function flagFor(code) {
+      if (!code || code.length !== 2 || code === 'XX') return '🌍';
+      const points = code.toUpperCase().split('').map(c => 0x1F1E6 - 65 + c.charCodeAt(0));
+      return String.fromCodePoint(...points);
+    }
+
+    // 国家代码 → 国家全名（用浏览器内置 Intl.DisplayNames）
+    let regionNames;
+    try { regionNames = new Intl.DisplayNames(['en'], { type: 'region' }); } catch (e) {}
+    function nameFor(code) {
+      if (!code || code === 'XX') return 'Unknown';
+      try { return regionNames ? regionNames.of(code) : code; } catch (e) { return code; }
+    }
+
+    // 城市名 → 稳定的彩色（同一城市每次都同色）
+    function colorForCity(city) {
+      let h = 0;
+      for (let i = 0; i < city.length; i++) h = (h * 31 + city.charCodeAt(i)) >>> 0;
+      const hue = h % 360;
+      return {
+        fill: 'hsl(' + hue + ', 65%, 55%)',
+        border: 'hsl(' + hue + ', 65%, 35%)',
+      };
+    }
+
+    // ③ 创建 cluster group
+    const markers = L.markerClusterGroup({
+      maxClusterRadius: 35,
+      showCoverageOnHover: false,
+      spiderfyOnMaxZoom: true,
+      spiderfyDistanceMultiplier: 1.6,
+      spiderLegPolylineOptions: { weight: 1, color: '#94a3b8', opacity: 0.5 },
+      iconCreateFunction: function (cluster) {
+        const n = cluster.getChildCount();
+        const size = n < 10 ? 30 : n < 100 ? 36 : 44;
+        return L.divIcon({
+          html: '<div class="visitor-cluster-inner"><span>' + n + '</span></div>',
+          className: 'visitor-cluster',
+          iconSize: [size, size],
+        });
+      },
+    });
+    map.addLayer(markers);
+
+    // ④ 拉取访客 → 画点 + 国家统计
     fetch(WORKER_URL)
       .then(r => r.json())
       .then(visits => {
+        const countryCounts = {};
+
         visits.forEach(v => {
           if (!v.latitude || !v.longitude) return;
-          L.circleMarker([v.latitude, v.longitude], {
+          const cityKey = (v.city || 'Unknown');
+          const c = colorForCity(cityKey);
+          const marker = L.circleMarker([v.latitude, v.longitude], {
             radius: 7,
-            fillColor: '#3b82f6',
-            color: '#1e40af',
+            fillColor: c.fill,
+            color: c.border,
             weight: 1.5,
-            fillOpacity: 0.6,
-          })
-            .bindPopup(
-              `<strong>${v.city || 'Unknown'}, ${v.country ||
-  ''}</strong><br>` +
-              `<small>${new Date(v.timestamp).toLocaleString()}</small>`
-            )
-            .addTo(map);
+            fillOpacity: 0.75,
+          });
+          marker.bindPopup(
+            '<strong>' + cityKey + ', ' + (v.country || '') + '</strong><br>' +
+            '<small>' + new Date(v.timestamp).toLocaleString() + '</small>'
+          );
+          markers.addLayer(marker);
+
+          // 统计国家
+          const code = v.country || 'XX';
+          countryCounts[code] = (countryCounts[code] || 0) + 1;
         });
-  
+
+        // 渲染国家统计列表
+        const listEl = document.getElementById('country-stats');
+        if (listEl) {
+          const sorted = Object.entries(countryCounts).sort((a, b) => b[1] - a[1]);
+          if (sorted.length === 0) {
+            listEl.innerHTML = '<li class="country-stats-empty">No visitors yet</li>';
+          } else {
+            listEl.innerHTML = sorted.map(([code, n]) =>
+              '<li>' +
+                '<span class="country-flag">' + flagFor(code) + '</span>' +
+                '<span class="country-name">' + nameFor(code) + '</span>' +
+                '<span class="country-count">' + n + '</span>' +
+              '</li>'
+            ).join('');
+          }
+        }
+
         const countEl = document.getElementById('visitor-count');
         if (countEl) {
           countEl.textContent = visits.length === 0
             ? 'Be the first visitor!'
-            : `Showing the last ${visits.length} visitor${visits.length
-  === 1 ? '' : 's'}`;
+            : 'Total visits: ' + visits.length;
         }
       })
       .catch(err => {
         console.error('Failed to load visitors:', err);
         const countEl = document.getElementById('visitor-count');
         if (countEl) countEl.textContent = 'Unable to load visitors';
+        const listEl = document.getElementById('country-stats');
+        if (listEl) listEl.innerHTML = '<li class="country-stats-empty">—</li>';
       });
   })();
   </script>
