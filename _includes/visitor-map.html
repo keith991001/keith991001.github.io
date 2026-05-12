@@ -93,19 +93,17 @@
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background: rgba(37, 99, 235, 0.85);
-      border: 2px solid rgba(255, 255, 255, 0.9);
-      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+      background: #2563eb;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
-      font-weight: 600;
-      font-size: 0.85rem;
-      transition: transform 0.15s ease;
+      font-weight: 500;
+      font-size: 0.8rem;
+      transition: opacity 0.15s ease;
     }
     .visitor-cluster:hover .visitor-cluster-inner {
-      transform: scale(1.08);
+      opacity: 0.85;
     }
 
     /* —— 移动端：垂直堆叠 + 防止 Leaflet 在 flex 里宽度为 0 —— */
@@ -174,13 +172,13 @@
     }
 
     // 城市名 → 稳定的彩色（同一城市每次都同色）
+    // 饱和度/亮度调低 → 更"端正"、不刺眼，匹配学术风
     function colorForCity(city) {
       let h = 0;
       for (let i = 0; i < city.length; i++) h = (h * 31 + city.charCodeAt(i)) >>> 0;
       const hue = h % 360;
       return {
-        fill: 'hsl(' + hue + ', 65%, 55%)',
-        border: 'hsl(' + hue + ', 65%, 35%)',
+        fill: 'hsl(' + hue + ', 55%, 50%)',
       };
     }
 
@@ -193,7 +191,7 @@
       spiderLegPolylineOptions: { weight: 1, color: '#94a3b8', opacity: 0.5 },
       iconCreateFunction: function (cluster) {
         const n = cluster.getChildCount();
-        const size = n < 10 ? 30 : n < 100 ? 36 : 44;
+        const size = n < 10 ? 22 : n < 100 ? 28 : 34;
         return L.divIcon({
           html: '<div class="visitor-cluster-inner"><span>' + n + '</span></div>',
           className: 'visitor-cluster',
@@ -214,11 +212,12 @@
           const cityKey = (v.city || 'Unknown');
           const c = colorForCity(cityKey);
           const marker = L.circleMarker([v.latitude, v.longitude], {
-            radius: 7,
+            radius: 4,
             fillColor: c.fill,
-            color: c.border,
-            weight: 1.5,
-            fillOpacity: 0.75,
+            color: '#111',           // 接近黑的深边
+            weight: 1,
+            opacity: 0.9,
+            fillOpacity: 1,
           });
           marker.bindPopup(
             '<strong>' + cityKey + ', ' + (v.country || '') + '</strong><br>' +
