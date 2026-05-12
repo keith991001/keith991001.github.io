@@ -108,15 +108,22 @@
       transform: scale(1.08);
     }
 
-    /* —— 移动端：垂直堆叠 —— */
+    /* —— 移动端：垂直堆叠 + 防止 Leaflet 在 flex 里宽度为 0 —— */
     @media (max-width: 768px) {
       .visitor-map-layout {
         flex-direction: column;
       }
+      .visitor-map-layout > #visitor-map {
+        width: 100%;
+        height: 320px;
+        flex: none;            /* 关键：移动端不用 flex 计算尺寸 */
+      }
       .visitor-stats {
+        flex: none;
         max-width: none;
-        height: auto;
-        max-height: 280px;
+        max-height: 240px;
+        padding-left: 0;
+        margin-top: 0.5rem;
       }
     }
   </style>
@@ -141,6 +148,13 @@
       maxZoom: 20,
       noWrap: true,
     }).addTo(map);
+
+    // 移动端/响应式：容器尺寸稳定后强制 Leaflet 重新计算
+    setTimeout(() => map.invalidateSize(), 200);
+    window.addEventListener('resize', () => map.invalidateSize());
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => map.invalidateSize(), 300);
+    });
 
     // —— 工具函数 ——
 
