@@ -1,0 +1,568 @@
+:root {
+  --bg: #ffffff;
+  --text: #2c3e50;
+  --accent: #3498db;
+  --muted: #7f8c8d;
+  --border: #ecf0f1;
+  --card-bg: #f8f9fa;
+  --nav-bg: #2c3e50;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Navigation */
+nav {
+  background: var(--nav-bg);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+nav .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+nav .site-title {
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+nav .nav-links a {
+  color: #ecf0f1;
+  margin-left: 2rem;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+nav .nav-links a:hover,
+nav .nav-links a.active {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Layout */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.page-header {
+  padding: 3rem 0 1.5rem;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 2rem;
+}
+.page-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.page-header p {
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+.content {
+  padding-bottom: 4rem;
+}
+
+/* Cards */
+.card {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-left: 3px solid var(--accent);
+}
+.card h3 { margin-bottom: 0.3rem; }
+.card .meta {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+.card ul {
+  margin-left: 1.2rem;
+  margin-top: 0.5rem;
+}
+.card li { margin-bottom: 0.3rem; font-size: 0.95rem; }
+
+/* Post list */
+.post-list { list-style: none; }
+.post-list li {
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.post-list .post-date {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.post-list .post-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+/* Bookmark grid */
+.bookmark-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+.bookmark-card {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1.2rem;
+  transition: transform 0.15s;
+}
+.bookmark-card:hover { transform: translateY(-2px); }
+.bookmark-card h3 { font-size: 1rem; margin-bottom: 0.3rem; }
+.bookmark-card .tag {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  margin-right: 0.3rem;
+}
+.bookmark-card p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+/* Post single */
+.post-content h2 { margin-top: 2rem; margin-bottom: 0.8rem; }
+.post-content p { margin-bottom: 1rem; }
+.post-content img { max-width: 100%; border-radius: 8px; }
+
+/* Hero */
+.hero {
+  padding: 4rem 0 2rem;
+  text-align: center;
+}
+.hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.hero .subtitle {
+  font-size: 1.15rem;
+  color: var(--muted);
+}
+.hero .links { margin-top: 1.5rem; }
+.hero .links a {
+  margin: 0 0.8rem;
+  font-weight: 500;
+}
+
+/* About section */
+.about-section { margin-bottom: 2.5rem; }
+.about-section h2 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.skill-tag {
+  background: var(--card-bg);
+  padding: 0.3rem 0.8rem;
+  border-radius: 16px;
+  font-size: 0.85rem;
+}
+
+/* ====== Projects ====== */
+.project-list {
+  list-style: none;
+  margin: 2.5rem 0 3rem;
+  padding: 0;
+  display: grid;
+  gap: 1.5rem;
+}
+.project-card {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid #ececec;
+}
+.project-card:last-child {
+  border-bottom: none;
+}
+.project-image {
+  width: 200px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: #f5f5f5;
+}
+.project-body {
+  flex: 1;
+  min-width: 0;
+}
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.4rem;
+}
+.project-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111;
+}
+.project-year {
+  font-size: 0.88rem;
+  color: #888;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+.project-desc {
+  font-size: 0.93rem;
+  color: #444;
+  line-height: 1.6;
+  margin: 0 0 0.6rem;
+}
+.project-tags {
+  margin: 0 0 0.6rem;
+}
+.project-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  color: #666;
+  background: #f3f4f6;
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+  margin-right: 0.35rem;
+  margin-bottom: 0.25rem;
+}
+.project-links {
+  margin: 0;
+  font-size: 0.88rem;
+}
+.project-links a {
+  color: #2563eb;
+  text-decoration: none;
+  margin-right: 1.2rem;
+}
+.project-links a:hover {
+  text-decoration: underline;
+}
+@media (max-width: 700px) {
+  .project-card {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .project-image {
+    width: 100%;
+    height: 180px;
+  }
+}
+
+/* ====== Bookmarks ====== */
+.bookmark-section {
+  margin: 2.5rem 0 3rem;
+}
+.bookmark-section > h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.01em;
+}
+.bookmark-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.75rem;
+}
+.bookmark-card {
+  position: relative;
+  border: 1px solid #ececec;
+  border-radius: 6px;
+  background: #fff;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.bookmark-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #9ca3af;
+}
+.bookmark-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-color: #d4d4d8;
+}
+.bookmark-link {
+  display: block;
+  padding: 0.95rem 1rem 0.95rem 1.1rem;
+  text-decoration: none;
+  color: inherit;
+}
+.bookmark-link:hover {
+  text-decoration: none;
+}
+.bookmark-title {
+  display: block;
+  font-weight: 600;
+  font-size: 0.98rem;
+  color: #1a1a1a;
+  line-height: 1.35;
+  margin-bottom: 0.3rem;
+}
+.bookmark-desc {
+  display: block;
+  font-size: 0.86rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* Category accents (color of the left bar + hover title) */
+.bookmark-research::before { background: #2563eb; }
+.bookmark-research:hover .bookmark-title { color: #2563eb; }
+
+.bookmark-learning::before { background: #16a34a; }
+.bookmark-learning:hover .bookmark-title { color: #16a34a; }
+
+.bookmark-tools::before { background: #f97316; }
+.bookmark-tools:hover .bookmark-title { color: #f97316; }
+
+.bookmark-reading::before { background: #9333ea; }
+.bookmark-reading:hover .bookmark-title { color: #9333ea; }
+
+.bookmark-inspiration::before { background: #ec4899; }
+.bookmark-inspiration:hover .bookmark-title { color: #ec4899; }
+
+/* ====== Academic minimal: About page ====== */
+.about-hero {
+  padding: 3rem 0 0;
+}
+.about-hero h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.about-tagline {
+  font-size: 1.05rem;
+  color: #555;
+  margin-top: 0.4rem;
+}
+.about-contact {
+  margin-top: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.about-contact a {
+  display: inline-flex;
+  align-items: center;
+  color: #555;
+  text-decoration: none;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+.about-contact a:hover {
+  color: #111;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+.about-contact svg {
+  display: block;
+}
+
+.about-bio {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+  margin: 2.5rem 0 3rem;
+}
+.bio-text {
+  flex: 1;
+  min-width: 0;
+}
+.about-bio p {
+  font-size: 0.98rem;
+  line-height: 1.75;
+  color: #333;
+  margin-bottom: 1rem;
+}
+.bio-photo {
+  width: 300px;
+  height: 300px;
+  border-radius: 0;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #f0f0f0;
+}
+@media (max-width: 700px) {
+  .about-bio {
+    flex-direction: column-reverse;
+    gap: 1.5rem;
+  }
+  .bio-photo {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+.about-skills {
+  margin-bottom: 3rem;
+}
+.skill-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 1rem;
+  padding: 0.4rem 0;
+  font-size: 0.93rem;
+  line-height: 1.6;
+}
+.skill-label {
+  color: #888;
+  font-weight: 500;
+}
+.skill-list {
+  color: #333;
+}
+@media (max-width: 600px) {
+  .skill-row {
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+    padding: 0.6rem 0;
+  }
+  .skill-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+}
+
+/* ====== Academic minimal entry style (Experiences) ====== */
+.page-header-minimal {
+  padding: 3rem 0 2rem;
+  margin-bottom: 1rem;
+}
+.page-header-minimal h1 {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+.page-header-minimal p {
+  color: #888;
+  margin-top: 0.4rem;
+  font-size: 0.95rem;
+}
+
+.entry-section {
+  margin-bottom: 3.5rem;
+}
+.entry-section:first-of-type {
+  margin-top: 2.5rem;
+}
+.entry-section > h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0;
+  border-bottom: none;
+  letter-spacing: -0.01em;
+}
+
+.entry {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  margin-bottom: 1.75rem;
+}
+.entry-logo {
+  height: 36px;
+  width: auto;
+  max-width: 80px;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+  object-fit: contain;
+  background: transparent;
+}
+.entry-body {
+  flex: 1;
+  min-width: 0;
+}
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+.entry-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.4;
+}
+.entry-date {
+  font-size: 0.88rem;
+  color: #888;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+.entry-meta {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.15rem;
+}
+.entry-points {
+  margin: 0.5rem 0 0;
+  padding-left: 0;
+  list-style: none;
+}
+.entry-points li {
+  font-size: 0.92rem;
+  color: #444;
+  line-height: 1.65;
+  padding-left: 1rem;
+  position: relative;
+}
+.entry-points li::before {
+  content: '·';
+  position: absolute;
+  left: 0.15rem;
+  color: #bbb;
+  font-weight: 700;
+}
+
+/* ====== Footer ====== */
+footer {
+  text-align: center;
+  padding: 2rem 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  nav .container { flex-direction: column; gap: 0.8rem; }
+  nav .nav-links a { margin-left: 1rem; }
+  .hero h1 { font-size: 1.8rem; }
+  .bookmark-grid { grid-template-columns: 1fr; }
+}

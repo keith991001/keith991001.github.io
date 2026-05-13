@@ -9,6 +9,8 @@ permalink: /thoughts/:year/:month/:title/
 collections:
   bookmarks:
     output: false
+  projects:
+    output: false
 
 defaults:
   - scope:

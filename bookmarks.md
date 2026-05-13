@@ -4,31 +4,26 @@ title: Bookmarks
 permalink: /bookmarks/
 ---
 
-<div class="page-header">
-  <h1>Bookmarks</h1>
-  <p>Useful websites and resources I've collected.</p>
-</div>
+{% assign grouped = site.bookmarks | group_by: "category" | sort: "name" %}
 
-<div class="bookmark-grid">
-
-{% for bookmark in site.bookmarks %}
-<div class="bookmark-card">
-  <h3><a href="{{ bookmark.url_link }}">{{ bookmark.title }}</a></h3>
-  {% if bookmark.tags %}
-  <div>
-    {% for tag in bookmark.tags %}
-    <span class="tag">{{ tag }}</span>
+{% for group in grouped %}
+<section class="bookmark-section">
+  <h2>{% if group.name == "" %}Other{% else %}{{ group.name }}{% endif %}</h2>
+  <ul class="bookmark-list">
+    {% for bm in group.items %}
+    <li class="bookmark-card bookmark-{{ bm.category | downcase | replace: ' ', '-' | default: 'other' }}">
+      <a class="bookmark-link" href="{{ bm.url_link }}" target="_blank" rel="noopener noreferrer">
+        <span class="bookmark-title">{{ bm.title }}</span>
+        {% if bm.description %}
+        <span class="bookmark-desc">{{ bm.description }}</span>
+        {% endif %}
+      </a>
+    </li>
     {% endfor %}
-  </div>
-  {% endif %}
-  {% if bookmark.description %}
-  <p>{{ bookmark.description }}</p>
-  {% endif %}
-</div>
+  </ul>
+</section>
 {% endfor %}
 
-</div>
-
 {% if site.bookmarks.size == 0 %}
-<p style="color: #7f8c8d; text-align: center; padding: 3rem 0;">No bookmarks yet. Add your first one!</p>
+<p style="color: #888; padding: 3rem 0;">No bookmarks yet.</p>
 {% endif %}
