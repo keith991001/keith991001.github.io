@@ -1,0 +1,144 @@
+  <section class="travel-section">
+    <h2 class="travel-title">Places I've Been</h2>
+
+    {% assign visited_codes = site.data.places | map: 'country_code' | uniq %}
+    {% assign visited_names = site.data.places | map: 'country' | uniq %}
+    {% assign continents = site.data.places | map: 'continent' | uniq %}
+    {% assign unique_countries = site.data.places | uniq: 'country_code' %}
+
+    <style>
+      .world-map {
+        width: 100%;
+        margin: 1rem 0;
+      }
+      .world-map svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .world-map svg path {
+        fill: #ececec;
+        stroke: #c0c5cc;
+        stroke-width: 0.3;
+        transition: fill 0.3s ease;
+      }
+      /* 访问过的国家：橙色 */
+      {% for code in visited_codes %}
+      .world-map svg path[id="{{ code | upcase }}"] { fill: #f97316; }
+      {% endfor %}
+      {% for name in visited_names %}
+      .world-map svg path[class~="{{ name }}"] { fill: #f97316; }
+      {% endfor %}
+
+      .travel-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin: 1.5rem 0 2rem;
+        text-align: center;
+      }
+      .stat-number {
+        display: block;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #f97316;
+        line-height: 1.1;
+        font-variant-numeric: tabular-nums;
+      }
+      .stat-label {
+        display: block;
+        font-size: 0.88rem;
+        color: #888;
+        margin-top: 0.25rem;
+      }
+
+      .country-list {
+        margin-top: 1.5rem;
+        margin-bottom: 3rem;
+      }
+      .country-list-header {
+        font-size: 0.82rem;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 600;
+        margin: 0 0 1rem;
+      }
+      .country-list ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .country-list li {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.7rem 0;
+        border-bottom: 1px solid #f0f0f0;
+      }
+      .country-list li:last-child {
+        border-bottom: none;
+      }
+      .country-flag {
+        font-size: 1.4rem;
+        line-height: 1;
+      }
+      .country-name {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #111;
+        min-width: 90px;
+      }
+      .city-list {
+        font-size: 0.92rem;
+        color: #666;
+        flex: 1;
+        min-width: 0;
+        line-height: 1.7;
+      }
+      .city-home {
+        color: #111;
+        font-weight: 600;
+      }
+      .city-sep {
+        margin: 0 0.4rem;
+        color: #d0d0d0;
+      }
+    </style>
+
+    <div class="world-map">
+      {% include world-countries.svg %}
+    </div>
+
+    <div class="travel-stats">
+      <div class="stat">
+        <span class="stat-number">{{ visited_names | size }}</span>
+        <span class="stat-label">Countries</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">{{ site.data.places | size }}</span>
+        <span class="stat-label">Cities</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">{{ continents | size }}</span>
+        <span class="stat-label">Continents</span>
+      </div>
+    </div>
+
+    <div class="country-list">
+      <p class="country-list-header">Countries Visited</p>
+      <ul>
+        {% assign by_country = site.data.places | group_by: 'country' %}
+        {% for group in by_country %}
+        {% assign first = group.items | first %}
+        <li>
+          <span class="country-flag">{{ first.flag }}</span>
+          <span class="country-name">{{ first.country }}</span>
+          <span class="city-list">
+            {% for city in group.items %}<span class="{% if city.type == 'home' %}city-home{% endif %}">{{ city.name }}</span>{% unless forloop.last %}<span class="city-sep">·</span>{% endunless %}{% endfor %}
+          </span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>

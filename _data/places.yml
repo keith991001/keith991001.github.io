@@ -1,0 +1,190 @@
+# 每个城市一条
+# country: 全名，决定列表里的分组 + 也用于匹配 SVG 多形状国家的 class
+# country_code: ISO 2 字母，匹配 SVG 单形状国家的 id（HK/MO/TW 都用各自的代码独立高亮）
+# continent: Asia / Europe / North America / South America / Africa / Oceania
+# flag: 国旗 emoji（列表里显示）
+# type: home (居住过) / visited (访问过)
+
+# —— Japan ——
+- name: Tokyo
+  country: Japan
+  country_code: JP
+  continent: Asia
+  flag: 🇯🇵
+  lat: 35.6762
+  lng: 139.6503
+  type: home
+
+- name: Osaka
+  country: Japan
+  country_code: JP
+  continent: Asia
+  flag: 🇯🇵
+  lat: 34.6937
+  lng: 135.5023
+  type: visited
+
+- name: Kyoto
+  country: Japan
+  country_code: JP
+  continent: Asia
+  flag: 🇯🇵
+  lat: 35.0116
+  lng: 135.7681
+  type: visited
+
+- name: Nara
+  country: Japan
+  country_code: JP
+  continent: Asia
+  flag: 🇯🇵
+  lat: 34.6851
+  lng: 135.8048
+  type: visited
+
+- name: Hamamatsu
+  country: Japan
+  country_code: JP
+  continent: Asia
+  flag: 🇯🇵
+  lat: 34.7108
+  lng: 137.7261
+  type: visited
+
+- name: Hokkaido
+  country: Japan
+  country_code: JP
+  continent: Asia
+  flag: 🇯🇵
+  lat: 43.0618
+  lng: 141.3545
+  type: visited
+
+- name: Kanagawa
+  country: Japan
+  country_code: JP
+  continent: Asia
+  flag: 🇯🇵
+  lat: 35.4437
+  lng: 139.6380
+  type: visited
+
+# —— China (mainland) ——
+- name: Shaoxing
+  country: China
+  country_code: CN
+  continent: Asia
+  flag: 🇨🇳
+  lat: 30.0023
+  lng: 120.5723
+  type: home
+
+- name: Hangzhou
+  country: China
+  country_code: CN
+  continent: Asia
+  flag: 🇨🇳
+  lat: 30.2741
+  lng: 120.1551
+  type: home
+
+- name: Wenzhou
+  country: China
+  country_code: CN
+  continent: Asia
+  flag: 🇨🇳
+  lat: 27.9939
+  lng: 120.6993
+  type: visited
+
+- name: Shanghai
+  country: China
+  country_code: CN
+  continent: Asia
+  flag: 🇨🇳
+  lat: 31.2304
+  lng: 121.4737
+  type: visited
+
+- name: Xuzhou
+  country: China
+  country_code: CN
+  continent: Asia
+  flag: 🇨🇳
+  lat: 34.2614
+  lng: 117.1839
+  type: visited
+
+- name: Zhengzhou
+  country: China
+  country_code: CN
+  continent: Asia
+  flag: 🇨🇳
+  lat: 34.7466
+  lng: 113.6253
+  type: visited
+
+- name: Yangzhou
+  country: China
+  country_code: CN
+  continent: Asia
+  flag: 🇨🇳
+  lat: 32.3942
+  lng: 119.4127
+  type: visited
+
+- name: Pingdingshan
+  country: China
+  country_code: CN
+  continent: Asia
+  flag: 🇨🇳
+  lat: 33.7660
+  lng: 113.1925
+  type: visited
+
+# —— China SARs / regions（列表里仍归 China，地图独立高亮）——
+- name: Hong Kong
+  country: China
+  country_code: HK
+  continent: Asia
+  flag: 🇨🇳
+  lat: 22.3193
+  lng: 114.1694
+  type: visited
+
+- name: Macau
+  country: China
+  country_code: MO
+  continent: Asia
+  flag: 🇨🇳
+  lat: 22.1987
+  lng: 113.5439
+  type: visited
+
+- name: Taiwan
+  country: China
+  country_code: TW
+  continent: Asia
+  flag: 🇨🇳
+  lat: 25.0330
+  lng: 121.5654
+  type: visited
+
+# —— Canada ——
+- name: Vancouver
+  country: Canada
+  country_code: CA
+  continent: North America
+  flag: 🇨🇦
+  lat: 49.2827
+  lng: -123.1207
+  type: visited
+
+- name: Edmonton
+  country: Canada
+  country_code: CA
+  continent: North America
+  flag: 🇨🇦
+  lat: 53.5461
+  lng: -113.4938
+  type: visited

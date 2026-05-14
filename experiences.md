@@ -34,7 +34,7 @@ permalink: /experiences/
 <h2>Work</h2>
 
 <div class="entry">
-  <img class="entry-logo" src="{{ '/assets/images/logos/pepabo.svg' | relative_url }}" alt="GMO Pepabo" />
+  <img class="entry-logo" src="{{ '/assets/images/logos/pepabo.png' | relative_url }}" alt="GMO Pepabo" />
   <div class="entry-body">
     <div class="entry-header">
       <span class="entry-title">Software Development Engineer · GMO Pepabo</span>
@@ -45,7 +45,7 @@ permalink: /experiences/
 </div>
 
 <div class="entry">
-  <img class="entry-logo" src="{{ '/assets/images/logos/quollio.svg' | relative_url }}" alt="Quollio" />
+  <img class="entry-logo" src="{{ '/assets/images/logos/quollio.png' | relative_url }}" alt="Quollio" />
   <div class="entry-body">
     <div class="entry-header">
       <span class="entry-title">Data Scientist Intern · Quollio Technologies</span>

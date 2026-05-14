@@ -179,6 +179,169 @@ nav .nav-links a.active {
   font-size: 0.85rem;
 }
 
+/* ====== Thoughts (posts list, grouped by year) ====== */
+.thought-year-section {
+  margin: 2.5rem 0 3.5rem;
+}
+.thought-year {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 1.5rem;
+  letter-spacing: -0.01em;
+}
+.thought-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2.5rem;
+}
+.thought-link {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+.thought-link:hover {
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+.thought-image {
+  width: 360px;
+  height: 215px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+  background: #f5f5f5;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease;
+}
+.thought-link:hover .thought-image {
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.12);
+}
+.thought-image-placeholder {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+}
+.thought-body {
+  flex: 1;
+  min-width: 0;
+}
+.thought-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 0.6rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+.thought-link:hover .thought-title {
+  color: #2563eb;
+}
+.thought-meta {
+  font-size: 0.9rem;
+  color: #888;
+  font-variant-numeric: tabular-nums;
+}
+.thought-meta-sep {
+  margin: 0 0.5rem;
+  color: #ccc;
+}
+@media (max-width: 700px) {
+  .thought-link {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  .thought-image {
+    width: 100%;
+    height: 200px;
+  }
+  .thought-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* ====== Single post page ====== */
+.post {
+  padding: 1rem 0 3rem;
+}
+.post-cover {
+  display: block;
+  margin: 1.5rem auto 2rem;
+  max-width: 640px;
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+.post-header {
+  margin: 2rem 0 1.5rem;
+}
+.post-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.4rem;
+  line-height: 1.25;
+}
+.post-meta {
+  color: #888;
+  font-size: 0.92rem;
+  margin: 0;
+}
+.post-content {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #333;
+}
+.post-content h2 {
+  margin: 2rem 0 0.8rem;
+  font-size: 1.4rem;
+  color: #111;
+}
+.post-content h3 {
+  margin: 1.5rem 0 0.6rem;
+  font-size: 1.15rem;
+  color: #111;
+}
+.post-content p {
+  margin-bottom: 1rem;
+}
+.post-content img {
+  max-width: 100%;
+  border-radius: 6px;
+}
+.post-content code {
+  background: #f3f4f6;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.88em;
+}
+.post-content pre {
+  background: #1f2937;
+  color: #e5e7eb;
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 0.88rem;
+}
+.post-content pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}
+.post-content blockquote {
+  border-left: 3px solid #d1d5db;
+  margin: 1rem 0;
+  padding: 0.25rem 0 0.25rem 1rem;
+  color: #555;
+}
+
 /* ====== Projects ====== */
 .project-list {
   list-style: none;
@@ -268,6 +431,42 @@ nav .nav-links a.active {
   }
 }
 
+/* ====== Empty section state ====== */
+.section-empty {
+  color: #aaa;
+  font-style: italic;
+  font-size: 0.9rem;
+  padding: 1rem 0;
+  margin: 0;
+}
+
+/* ====== Filter chips (shared by Bookmarks & Thoughts) ====== */
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 2rem 0 2.5rem;
+}
+.filter-chips .chip {
+  background: #f3f4f6;
+  border: 1px solid transparent;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: #555;
+  font-family: inherit;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.filter-chips .chip:hover {
+  background: #e5e7eb;
+  color: #111;
+}
+.filter-chips .chip.active {
+  background: #111;
+  color: #fff;
+}
+
 /* ====== Bookmarks ====== */
 .bookmark-section {
   margin: 2.5rem 0 3rem;
@@ -289,25 +488,16 @@ nav .nav-links a.active {
 }
 .bookmark-card {
   position: relative;
-  border: 1px solid #ececec;
-  border-radius: 6px;
-  background: #fff;
+  border: none;
+  border-radius: 8px;
+  background: #f5f5f5;
   overflow: hidden;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-}
-.bookmark-card::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: #9ca3af;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .bookmark-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  border-color: #d4d4d8;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 .bookmark-link {
   display: block;
@@ -333,21 +523,11 @@ nav .nav-links a.active {
   line-height: 1.5;
 }
 
-/* Category accents (color of the left bar + hover title) */
-.bookmark-research::before { background: #2563eb; }
-.bookmark-research:hover .bookmark-title { color: #2563eb; }
-
-.bookmark-learning::before { background: #16a34a; }
-.bookmark-learning:hover .bookmark-title { color: #16a34a; }
-
-.bookmark-tools::before { background: #f97316; }
-.bookmark-tools:hover .bookmark-title { color: #f97316; }
-
-.bookmark-reading::before { background: #9333ea; }
-.bookmark-reading:hover .bookmark-title { color: #9333ea; }
-
-.bookmark-inspiration::before { background: #ec4899; }
-.bookmark-inspiration:hover .bookmark-title { color: #ec4899; }
+/* Sticky-note style: pastel background per category */
+.bookmark-tool    { background: #e5e7eb; }   /* neutral gray */
+.bookmark-ai      { background: #fae8ff; }   /* pink-purple (fuchsia) */
+.bookmark-finance { background: #dcfce7; }   /* mint green */
+.bookmark-other   { background: #fef3c7; }   /* warm yellow */
 
 /* ====== Academic minimal: About page ====== */
 .about-hero {
@@ -492,13 +672,16 @@ nav .nav-links a.active {
   margin-bottom: 1.75rem;
 }
 .entry-logo {
-  height: 36px;
-  width: auto;
-  max-width: 80px;
+  width: 48px;
+  height: 48px;
   flex-shrink: 0;
-  margin-top: 0.2rem;
+  margin-top: 0.1rem;
   object-fit: contain;
-  background: transparent;
+  box-sizing: border-box;
+}
+/* UTokyo 图片自带留白，其他 logo 充满 PNG，所以给非 UTokyo 加内边距匹配 */
+.entry-logo:not([src*="utokyo"]) {
+  padding: 8px;
 }
 .entry-body {
   flex: 1;

@@ -4,21 +4,63 @@ title: Thoughts
 permalink: /thoughts/
 ---
 
-<div class="page-header">
-  <h1>Thoughts</h1>
-  <p>Notes, ideas, and reflections.</p>
+<div class="filter-chips">
+  <button class="chip active" data-cat="all">All</button>
+  {% for cat in site.thought_categories %}
+  <button class="chip" data-cat="{{ cat | downcase | replace: ' ', '-' }}">{{ cat }}</button>
+  {% endfor %}
 </div>
 
-<ul class="post-list">
-{% for post in site.posts %}
-  <li>
-    <span class="post-date">{{ post.date | date: "%B %d, %Y" }}</span>
-    <div class="post-title"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></div>
-    {% if post.excerpt %}<p style="color: #7f8c8d; font-size: 0.9rem;">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>{% endif %}
-  </li>
+{% for cat in site.thought_categories %}
+{% assign cat_slug = cat | downcase | replace: ' ', '-' %}
+{% assign items = site.posts | where: 'category', cat | sort: 'date' | reverse %}
+<section class="thought-year-section" data-cat="{{ cat_slug }}">
+  <h2 class="thought-year">{{ cat }}</h2>
+  {% if items.size > 0 %}
+  <ul class="thought-list">
+    {% for post in items %}
+    {% assign words = post.content | strip_html | number_of_words %}
+    {% assign minutes = words | divided_by: 220 | plus: 1 %}
+    <li class="thought-card">
+      <a class="thought-link" href="{{ post.url | relative_url }}">
+        {% if post.cover %}
+        <img class="thought-image" src="{{ post.cover | relative_url }}" alt="{{ post.title }}" />
+        {% else %}
+        <div class="thought-image thought-image-placeholder"></div>
+        {% endif %}
+        <div class="thought-body">
+          <h3 class="thought-title">{{ post.title }}</h3>
+          <div class="thought-meta">
+            <span>{{ post.date | date: "%-d %B %Y" }}</span>
+            <span class="thought-meta-sep">·</span>
+            <span>{{ words }} words</span>
+            <span class="thought-meta-sep">·</span>
+            <span>{{ minutes }} min read</span>
+          </div>
+        </div>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="section-empty">No thoughts yet.</p>
+  {% endif %}
+</section>
 {% endfor %}
-</ul>
 
-{% if site.posts.size == 0 %}
-<p style="color: #7f8c8d; text-align: center; padding: 3rem 0;">No thoughts yet. Start writing!</p>
-{% endif %}
+<script>
+(function () {
+  const chips = document.querySelectorAll('.filter-chips .chip');
+  const sections = document.querySelectorAll('.thought-year-section');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const cat = chip.dataset.cat;
+      sections.forEach(s => {
+        s.style.display = (cat === 'all' || s.dataset.cat === cat) ? '' : 'none';
+      });
+    });
+  });
+})();
+</script>

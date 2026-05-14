@@ -26,3 +26,17 @@ defaults:
 
 plugins:
   - jekyll-seo-tag
+
+# 分类配置（决定 Bookmarks / Thoughts 页顶部的 chip 顺序）
+# 未来想加新分类，在这里加一行，所有 chips 自动出现
+bookmark_categories:
+  - Tool
+  - AI
+  - Finance
+  - Other
+
+thought_categories:
+  - Computer
+  - AI
+  - Finance
+  - Daily

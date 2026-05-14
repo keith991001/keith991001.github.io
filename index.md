@@ -31,29 +31,14 @@ title: About
 
 <section class="about-bio">
   <div class="bio-text">
-    <p>I'm a software engineer at GMO Pepabo. I recently completed my Master of Engineering in System Innovation at The University of Tokyo, with an undergraduate background in Electronic Business from Zhejiang Gongshang University. My research has focused on synthetic tabular data generation guided by knowledge graphs and large language models, and on multimodal data fusion for object detection.</p>
-    <p>Before joining Pepabo, I interned as a data scientist at Quollio Technologies, building graph-based data networks for lineage tracking and natural-language-to-SQL pipelines. I'm interested in bridging cutting-edge AI research with practical software engineering.</p>
+    <p>Hi, I'm Ke Yu — feel free to call me Keith. I'm from Shaoxing, Zhejiang in China. I studied computer science as an undergrad in Hangzhou and completed my master's at The University of Tokyo, where my research focused on data fusion and synthetic data generation. I'm currently a software development engineer at an internet company in Tokyo.</p>
+    <p>Outside of work, I've been gaming since kindergarten. I've played pretty much every genre — MMORPG, FPS, MOBA, SLG — and these days my favorites are League of Legends, Valorant, and TFT.</p>
+    <p>I also play and watch a lot of basketball; I'm a die-hard Stephen Curry fan. I love traveling the world, though my list of visited places is still on the shorter side.</p>
+    <p>If you'd like to chat or collaborate, feel free to reach out.</p>
   </div>
   <img class="bio-photo" src="{{ '/assets/images/profile.jpg' | relative_url }}" alt="Ke Yu" />
 </section>
 
-<section class="about-skills">
-  <div class="skill-row">
-    <span class="skill-label">Languages</span>
-    <span class="skill-list">Chinese (native), English, Japanese</span>
-  </div>
-  <div class="skill-row">
-    <span class="skill-label">Programming</span>
-    <span class="skill-list">Python, Java, SQL</span>
-  </div>
-  <div class="skill-row">
-    <span class="skill-label">AI &amp; ML</span>
-    <span class="skill-list">Machine Learning, Deep Learning, Reinforcement Learning, Explainable AI, NLP</span>
-  </div>
-  <div class="skill-row">
-    <span class="skill-label">Tools</span>
-    <span class="skill-list">Flask, Neo4j, Tableau, Git, Docker, AWS, Linux</span>
-  </div>
-</section>
+{% include travel-map.html %}
 
 {% include visitor-map.html %}
