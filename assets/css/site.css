@@ -431,6 +431,22 @@ nav .nav-links a.active {
   }
 }
 
+/* ====== Twemoji (cross-platform emoji rendering, esp. Windows flags) ====== */
+img.emoji {
+  height: 1em;
+  width: 1em;
+  margin: 0 0.05em 0 0.1em;
+  vertical-align: -0.1em;
+  display: inline-block;
+}
+/* 国旗在国家列表/访客表格里稍大 */
+.country-flag img.emoji,
+.row-flag img.emoji {
+  height: 1.2em;
+  width: 1.8em;
+  vertical-align: -0.2em;
+}
+
 /* ====== Empty section state ====== */
 .section-empty {
   color: #aaa;

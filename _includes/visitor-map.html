@@ -276,6 +276,13 @@
         const countries = rows.length;
         document.getElementById('visitor-count').textContent =
           total + ' visits from ' + countries + ' countr' + (countries === 1 ? 'y' : 'ies');
+
+        // 动态生成的国旗也用 Twemoji 处理（兼容 Windows）
+        if (typeof twemoji !== 'undefined') {
+          twemoji.parse(document.getElementById('visitor-table-body'), {
+            folder: 'svg', ext: '.svg'
+          });
+        }
       })
       .catch(err => {
         console.error('Failed to load visitors:', err);

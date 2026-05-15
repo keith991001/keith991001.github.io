@@ -17,5 +17,13 @@
       &copy; {{ site.time | date: '%Y' }} {{ site.title }}
     </div>
   </footer>
+
+  <!-- Twemoji: 让 Windows 也能正常显示 emoji 国旗 -->
+  <script src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+  <script>
+    if (typeof twemoji !== 'undefined') {
+      twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+    }
+  </script>
 </body>
 </html>
