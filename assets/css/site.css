@@ -47,10 +47,14 @@ nav .nav-links a {
   text-decoration: none;
   transition: color 0.2s;
 }
-nav .nav-links a:hover,
+nav .nav-links a:hover {
+  color: #fff;
+}
 nav .nav-links a.active {
   color: #fff;
-  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 2px solid #fff;
+  padding-bottom: 4px;
 }
 
 /* Layout */
