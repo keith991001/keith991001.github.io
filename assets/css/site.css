@@ -24,6 +24,16 @@
   --radius-md: 8px;
   --radius-lg: 10px;
   --radius-pill: 999px;
+
+  --gray-50:  #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #cccccc;
+  --gray-500: #888888;
+  --gray-700: #555555;
+  --ink-soft: #333333;
+  --ink:      #111111;
 }
 
 /* Base heading hierarchy (overridden by class-specific component rules) */
@@ -235,7 +245,7 @@ nav .nav-links a.active {
 .thought-year {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #111;
+  color: var(--ink);
   margin: 0 0 1.5rem;
   letter-spacing: -0.01em;
 }
@@ -264,7 +274,7 @@ nav .nav-links a.active {
   object-fit: cover;
   border-radius: var(--radius-lg);
   flex-shrink: 0;
-  background: #f5f5f5;
+  background: var(--gray-100);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: box-shadow var(--motion-base) ease;
 }
@@ -272,7 +282,7 @@ nav .nav-links a.active {
   box-shadow: 0 6px 28px rgba(0, 0, 0, 0.12);
 }
 .thought-image-placeholder {
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-200) 100%);
 }
 .thought-body {
   flex: 1;
@@ -281,7 +291,7 @@ nav .nav-links a.active {
 .thought-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #111;
+  color: var(--ink);
   margin: 0 0 0.6rem;
   line-height: 1.35;
   letter-spacing: -0.01em;
@@ -291,12 +301,12 @@ nav .nav-links a.active {
 }
 .thought-meta {
   font-size: 0.9rem;
-  color: #888;
+  color: var(--gray-500);
   font-variant-numeric: tabular-nums;
 }
 .thought-meta-sep {
   margin: 0 0.5rem;
-  color: #ccc;
+  color: var(--gray-400);
 }
 @media (max-width: 700px) {
   .thought-link {
@@ -333,30 +343,30 @@ nav .nav-links a.active {
 .post-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #111;
+  color: var(--ink);
   letter-spacing: -0.01em;
   margin: 0 0 0.4rem;
   line-height: 1.25;
 }
 .post-meta {
-  color: #888;
+  color: var(--gray-500);
   font-size: 0.92rem;
   margin: 0;
 }
 .post-content {
   font-size: 1rem;
   line-height: 1.75;
-  color: #333;
+  color: var(--ink-soft);
 }
 .post-content h2 {
   margin: 2rem 0 0.8rem;
   font-size: 1.4rem;
-  color: #111;
+  color: var(--ink);
 }
 .post-content h3 {
   margin: 1.5rem 0 0.6rem;
   font-size: 1.15rem;
-  color: #111;
+  color: var(--ink);
 }
 .post-content p {
   margin-bottom: 1rem;
@@ -366,14 +376,14 @@ nav .nav-links a.active {
   border-radius: var(--radius);
 }
 .post-content code {
-  background: #f3f4f6;
+  background: var(--gray-100);
   padding: 0.1rem 0.35rem;
   border-radius: var(--radius-sm);
   font-size: 0.88em;
 }
 .post-content pre {
   background: #1f2937;
-  color: #e5e7eb;
+  color: var(--gray-200);
   padding: 1rem;
   border-radius: var(--radius);
   overflow-x: auto;
@@ -385,10 +395,10 @@ nav .nav-links a.active {
   color: inherit;
 }
 .post-content blockquote {
-  border-left: 3px solid #d1d5db;
+  border-left: 3px solid var(--gray-300);
   margin: 1rem 0;
   padding: 0.25rem 0 0.25rem 1rem;
-  color: #555;
+  color: var(--gray-700);
 }
 
 /* ====== Projects ====== */
@@ -404,12 +414,12 @@ nav .nav-links a.active {
   gap: 1.5rem;
   padding: 1.25rem 1rem;
   margin: 0 -1rem;
-  border-bottom: 1px solid #ececec;
+  border-bottom: 1px solid var(--gray-200);
   border-radius: var(--radius);
   transition: background var(--motion-base) ease;
 }
 .project-card:hover {
-  background: #f9fafb;
+  background: var(--gray-50);
 }
 .project-card:last-child {
   border-bottom: none;
@@ -420,7 +430,7 @@ nav .nav-links a.active {
   object-fit: cover;
   border-radius: var(--radius);
   flex-shrink: 0;
-  background: #f5f5f5;
+  background: var(--gray-100);
 }
 .project-body {
   flex: 1;
@@ -436,19 +446,19 @@ nav .nav-links a.active {
 .project-title {
   font-size: 1.05rem;
   font-weight: 600;
-  color: #111;
+  color: var(--ink);
   margin: 0;
   line-height: 1.3;
 }
 .project-year {
   font-size: 0.88rem;
-  color: #888;
+  color: var(--gray-500);
   font-variant-numeric: tabular-nums;
   flex-shrink: 0;
 }
 .project-desc {
   font-size: 0.93rem;
-  color: #444;
+  color: var(--ink-soft);
   line-height: 1.6;
   margin: 0 0 0.6rem;
 }
@@ -458,8 +468,8 @@ nav .nav-links a.active {
 .project-tag {
   display: inline-block;
   font-size: 0.72rem;
-  color: #666;
-  background: #f3f4f6;
+  color: var(--gray-700);
+  background: var(--gray-100);
   padding: 0.15rem 0.55rem;
   border-radius: var(--radius-sm);
   margin-right: 0.35rem;
@@ -506,7 +516,7 @@ img.emoji {
 
 /* ====== Empty section state ====== */
 .section-empty {
-  color: #aaa;
+  color: var(--gray-500);
   font-style: italic;
   font-size: 0.9rem;
   padding: 1rem 0;
@@ -521,22 +531,22 @@ img.emoji {
   margin: 2rem 0 2.5rem;
 }
 .filter-chips .chip {
-  background: #f3f4f6;
+  background: var(--gray-100);
   border: 1px solid transparent;
   padding: 0.4rem 1rem;
   border-radius: var(--radius-pill);
   cursor: pointer;
   font-size: 0.88rem;
-  color: #555;
+  color: var(--gray-700);
   font-family: inherit;
   transition: background var(--motion-fast) ease, color var(--motion-fast) ease, border-color var(--motion-fast) ease;
 }
 .filter-chips .chip:hover {
-  background: #e5e7eb;
-  color: #111;
+  background: var(--gray-200);
+  color: var(--ink);
 }
 .filter-chips .chip.active {
-  background: #111;
+  background: var(--ink);
   color: #fff;
 }
 
@@ -547,7 +557,7 @@ img.emoji {
 .bookmark-section > h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #111;
+  color: var(--ink);
   margin-bottom: 1.25rem;
   letter-spacing: -0.01em;
 }
@@ -563,7 +573,7 @@ img.emoji {
   position: relative;
   border: none;
   border-radius: var(--radius-md);
-  background: #f5f5f5;
+  background: var(--gray-100);
   overflow: hidden;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
   transition: transform var(--motion-fast) ease, box-shadow var(--motion-fast) ease;
@@ -585,19 +595,19 @@ img.emoji {
   display: block;
   font-weight: 600;
   font-size: 0.98rem;
-  color: #1a1a1a;
+  color: var(--ink);
   line-height: 1.35;
   margin-bottom: 0.3rem;
 }
 .bookmark-desc {
   display: block;
   font-size: 0.86rem;
-  color: #666;
+  color: var(--gray-700);
   line-height: 1.5;
 }
 
 /* Sticky-note style: pastel background per category */
-.bookmark-tool    { background: #e5e7eb; }   /* neutral gray */
+.bookmark-tool    { background: var(--gray-200); }   /* neutral gray */
 .bookmark-ai      { background: #fae8ff; }   /* pink-purple (fuchsia) */
 .bookmark-finance { background: #dcfce7; }   /* mint green */
 .bookmark-other   { background: #fef3c7; }   /* warm yellow */
@@ -609,13 +619,13 @@ img.emoji {
 .about-hero h1 {
   font-size: 2rem;
   font-weight: 700;
-  color: #111;
+  color: var(--ink);
   letter-spacing: -0.02em;
   margin: 0;
 }
 .about-tagline {
   font-size: 1.05rem;
-  color: #555;
+  color: var(--gray-700);
   margin-top: 0.4rem;
 }
 .about-contact {
@@ -627,12 +637,12 @@ img.emoji {
 .about-contact a {
   display: inline-flex;
   align-items: center;
-  color: #555;
+  color: var(--gray-700);
   text-decoration: none;
   transition: color var(--motion-fast) ease, transform var(--motion-fast) ease;
 }
 .about-contact a:hover {
-  color: #111;
+  color: var(--ink);
   text-decoration: none;
   transform: translateY(-1px);
 }
@@ -653,7 +663,7 @@ img.emoji {
 .about-bio p {
   font-size: 0.98rem;
   line-height: 1.75;
-  color: #333;
+  color: var(--ink-soft);
   margin-bottom: 1rem;
 }
 .bio-photo {
@@ -662,7 +672,7 @@ img.emoji {
   border-radius: 0;
   object-fit: cover;
   flex-shrink: 0;
-  background: #f0f0f0;
+  background: var(--gray-100);
 }
 @media (max-width: 700px) {
   .about-bio {
@@ -687,11 +697,11 @@ img.emoji {
   line-height: 1.6;
 }
 .skill-label {
-  color: #888;
+  color: var(--gray-500);
   font-weight: 500;
 }
 .skill-list {
-  color: #333;
+  color: var(--ink-soft);
 }
 @media (max-width: 600px) {
   .skill-row {
@@ -714,10 +724,10 @@ img.emoji {
 .page-header-minimal h1 {
   font-size: 1.7rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--ink);
 }
 .page-header-minimal p {
-  color: #888;
+  color: var(--gray-500);
   margin-top: 0.4rem;
   font-size: 0.95rem;
 }
@@ -731,7 +741,7 @@ img.emoji {
 .entry-section > h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #111;
+  color: var(--ink);
   margin-bottom: 1.25rem;
   padding-bottom: 0;
   border-bottom: none;
@@ -771,19 +781,19 @@ img.emoji {
   min-width: 0;
   font-size: 1rem;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--ink);
   line-height: 1.4;
 }
 .entry-date {
   font-size: 0.88rem;
-  color: #888;
+  color: var(--gray-500);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
   flex-shrink: 0;
 }
 .entry-meta {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--gray-700);
   margin-top: 0.15rem;
 }
 .entry-points {
@@ -793,7 +803,7 @@ img.emoji {
 }
 .entry-points li {
   font-size: 0.92rem;
-  color: #444;
+  color: var(--ink-soft);
   line-height: 1.65;
   padding-left: 1rem;
   position: relative;
@@ -802,7 +812,7 @@ img.emoji {
   content: '·';
   position: absolute;
   left: 0.15rem;
-  color: #bbb;
+  color: var(--gray-400);
   font-weight: 700;
 }
 
