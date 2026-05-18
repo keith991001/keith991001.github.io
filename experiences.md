@@ -4,6 +4,8 @@ title: Experiences
 permalink: /experiences/
 ---
 
+# Experiences
+
 <section class="entry-section">
 <h2>Education</h2>
 

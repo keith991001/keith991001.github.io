@@ -4,6 +4,8 @@ title: Projects
 permalink: /projects/
 ---
 
+# Projects
+
 <ul class="project-list">
 {% assign sorted = site.projects | sort: "year" | reverse %}
 {% for p in sorted %}
@@ -13,7 +15,7 @@ permalink: /projects/
   {% endif %}
   <div class="project-body">
     <div class="project-header">
-      <span class="project-title">{{ p.title }}</span>
+      <h2 class="project-title">{{ p.title }}</h2>
       {% if p.year %}<span class="project-year">{{ p.year }}</span>{% endif %}
     </div>
     {% if p.description %}
