@@ -396,8 +396,14 @@ nav .nav-links a.active {
 .project-card {
   display: flex;
   gap: 1.5rem;
-  padding: 1.25rem 0;
+  padding: 1.25rem 1rem;
+  margin: 0 -1rem;
   border-bottom: 1px solid #ececec;
+  border-radius: 6px;
+  transition: background var(--motion-base) ease;
+}
+.project-card:hover {
+  background: #f9fafb;
 }
 .project-card:last-child {
   border-bottom: none;
