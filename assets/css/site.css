@@ -1,7 +1,7 @@
 :root {
   --bg: #ffffff;
   --text: #2c3e50;
-  --accent: #3498db;
+  --accent: #2563eb;
   --muted: #7f8c8d;
   --border: #ecf0f1;
   --card-bg: #f8f9fa;
@@ -18,8 +18,8 @@ body {
   font-size: 16px;
 }
 
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
+a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
 
 /* Navigation */
 nav {
@@ -44,6 +44,7 @@ nav .nav-links a {
   color: #ecf0f1;
   margin-left: 2rem;
   font-size: 0.95rem;
+  text-decoration: none;
   transition: color 0.2s;
 }
 nav .nav-links a:hover,
@@ -238,7 +239,7 @@ nav .nav-links a.active {
   letter-spacing: -0.01em;
 }
 .thought-link:hover .thought-title {
-  color: #2563eb;
+  color: var(--accent);
 }
 .thought-meta {
   font-size: 0.9rem;
@@ -415,7 +416,7 @@ nav .nav-links a.active {
   font-size: 0.88rem;
 }
 .project-links a {
-  color: #2563eb;
+  color: var(--accent);
   text-decoration: none;
   margin-right: 1.2rem;
 }
