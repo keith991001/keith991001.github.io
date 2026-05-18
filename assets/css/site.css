@@ -34,9 +34,14 @@
   --gray-700: #555555;
   --ink-soft: #333333;
   --ink:      #111111;
+
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
 }
 
 /* Base heading hierarchy (overridden by class-specific component rules) */
+h1, h2, h3 {
+  font-family: var(--font-display);
+}
 h1 {
   font-size: clamp(var(--fs-xl), 1rem + 3vw, var(--fs-2xl));
   font-weight: 700;
