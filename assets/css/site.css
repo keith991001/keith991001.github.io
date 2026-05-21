@@ -208,7 +208,12 @@ nav .nav-links a.active {
 /* Post single */
 .post-content h2 { margin-top: 2rem; margin-bottom: 0.8rem; }
 .post-content p { margin-bottom: 1rem; }
-.post-content img { max-width: 100%; border-radius: var(--radius-md); }
+.post-content img {
+  display: block;
+  max-width: 100%;
+  margin: 1.5rem auto;
+  border-radius: var(--radius-md);
+}
 
 /* Hero */
 .hero {
