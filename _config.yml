@@ -4,6 +4,15 @@ url: "https://keith991001.github.io"
 baseurl: ""
 
 markdown: kramdown
+highlighter: rouge
+
+kramdown:
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: highlight
+    block:
+      line_numbers: false
+
 permalink: /thoughts/:year/:month/:title/
 
 collections:

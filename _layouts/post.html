@@ -1,15 +1,69 @@
 ---
 layout: default
 ---
-<article class="post">
-  <header class="post-header">
-    <h1 class="post-title">{{ page.title }}</h1>
-    <p class="post-meta">{{ page.date | date: "%B %-d, %Y" }}</p>
-  </header>
-  {% if page.cover %}
-  <img class="post-cover" src="{{ page.cover | relative_url }}" alt="{{ page.title }}" />
-  {% endif %}
-  <div class="post-content">
-    {{ content }}
-  </div>
-</article>
+<div class="post-layout">
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">{{ page.title }}</h1>
+      <p class="post-meta">{{ page.date | date: "%B %-d, %Y" }}</p>
+    </header>
+    {% if page.cover %}
+    <img class="post-cover" src="{{ page.cover | relative_url }}" alt="{{ page.title }}" />
+    {% endif %}
+    <div class="post-content">
+      {{ content }}
+    </div>
+  </article>
+
+  <aside class="post-toc" aria-label="Table of contents">
+    <h2 class="post-toc-title">目录</h2>
+    <nav id="toc"></nav>
+  </aside>
+</div>
+
+<script>
+  (function () {
+    const headings = Array.from(document.querySelectorAll('.post-content h2, .post-content h3'))
+      .filter(h => h.id);
+    if (headings.length < 4) {
+      document.querySelector('.post-toc')?.remove();
+      return;
+    }
+    const toc = document.getElementById('toc');
+    const ul = document.createElement('ul');
+    const linkById = new Map();
+    headings.forEach(h => {
+      const li = document.createElement('li');
+      li.className = 'toc-' + h.tagName.toLowerCase();
+      const a = document.createElement('a');
+      a.href = '#' + h.id;
+      a.textContent = h.textContent;
+      li.appendChild(a);
+      ul.appendChild(li);
+      linkById.set(h.id, a);
+    });
+    toc.appendChild(ul);
+
+    // Scroll-spy: highlight active section as user scrolls
+    let activeLink = null;
+    const setActive = (a) => {
+      if (activeLink === a) return;
+      if (activeLink) activeLink.classList.remove('active');
+      if (a) a.classList.add('active');
+      activeLink = a;
+    };
+    const observer = new IntersectionObserver((entries) => {
+      // Find the topmost heading currently in the active zone
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a, b) => a.target.offsetTop - b.target.offsetTop);
+      if (visible.length > 0) {
+        setActive(linkById.get(visible[0].target.id));
+      }
+    }, {
+      rootMargin: '-80px 0px -75% 0px',
+      threshold: 0,
+    });
+    headings.forEach(h => observer.observe(h));
+  })();
+</script>
