@@ -118,7 +118,7 @@ a:hover { text-decoration-thickness: 2px; }
 
 /* Layout */
 .container {
-  max-width: 960px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
@@ -578,29 +578,29 @@ main.container:has(.post-layout) {
   margin: 2.5rem 0 3rem;
   padding: 0;
   display: grid;
-  gap: 1.5rem;
+  gap: 2.5rem;
 }
 .project-card {
   display: flex;
+  flex-direction: column;
   gap: 1.5rem;
-  padding: 1.25rem 1rem;
-  margin: 0 -1rem;
-  border-bottom: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  transition: background var(--motion-base) ease;
+  padding: 2rem;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  transition: background var(--motion-base) ease, border-color var(--motion-base) ease, box-shadow var(--motion-base) ease;
 }
 .project-card:hover {
-  background: var(--gray-50);
-}
-.project-card:last-child {
-  border-bottom: none;
+  border-color: var(--gray-300);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 .project-image {
-  width: 200px;
-  height: 130px;
-  object-fit: cover;
+  display: block;
+  width: 100%;
+  max-width: 510px;
+  height: auto;
+  margin: 0 auto;
   border-radius: var(--radius);
-  flex-shrink: 0;
   background: var(--gray-100);
 }
 .project-body {
