@@ -7,7 +7,13 @@ layout: default
   <article class="post">
     <header class="post-header">
       <h1 class="post-title">{{ page.title }}</h1>
-      <p class="post-meta">{{ page.date | date: "%B %-d, %Y" }}</p>
+      <p class="post-meta">
+        <span class="post-meta-published">{{ page.date | date: "%B %-d, %Y" }}</span>
+        {%- if page.updated and page.updated != page.date -%}
+        <span class="post-meta-sep">·</span>
+        <span class="post-meta-updated">更新于 {{ page.updated | date: "%B %-d, %Y" }}</span>
+        {%- endif -%}
+      </p>
     </header>
     {% if page.cover %}
     <img class="post-cover" src="{{ page.cover | relative_url }}" alt="{{ page.title }}" />
@@ -30,19 +36,27 @@ layout: default
     <line x1="4" y1="14" x2="12" y2="14" />
   </svg>
 </button>
+
+<button class="back-to-top" type="button" aria-label="回到顶部" hidden>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 15V5M5 10l5-5 5 5" />
+  </svg>
+</button>
+
 <div class="toc-backdrop" hidden></div>
 
 <script>
   (function () {
-    const headings = Array.from(document.querySelectorAll('.post-content h2, .post-content h3'))
-      .filter(h => h.id);
+    const SELECTOR = '.post-content h2, .post-content h3, .post-content h4, .post-content h5';
+    const headings = Array.from(document.querySelectorAll(SELECTOR)).filter(h => h.id);
     const tocPanel = document.querySelector('.post-toc');
     const toggle = document.querySelector('.toc-toggle');
     const backdrop = document.querySelector('.toc-backdrop');
     const progress = document.querySelector('.reading-progress');
-
-    // --- Reading progress (always-on for posts) ---
+    const backToTop = document.querySelector('.back-to-top');
     const article = document.querySelector('.post-content');
+
+    // --- Reading progress + back-to-top visibility ---
     if (progress && article) {
       const updateProgress = () => {
         const articleTop = article.getBoundingClientRect().top + window.scrollY;
@@ -51,13 +65,60 @@ layout: default
         const read = Math.max(0, Math.min(articleHeight, viewportBottom - articleTop));
         const pct = articleHeight > 0 ? (read / articleHeight) * 100 : 0;
         progress.style.transform = `scaleX(${pct / 100})`;
+        if (backToTop) {
+          backToTop.classList.toggle('visible', window.scrollY > 600);
+        }
       };
       window.addEventListener('scroll', updateProgress, { passive: true });
       window.addEventListener('resize', updateProgress);
       updateProgress();
     }
 
-    // --- TOC: bail out if too few headings ---
+    // --- Back-to-top wiring ---
+    if (backToTop) {
+      backToTop.hidden = false;
+      backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // --- Heading anchor links ---
+    headings.forEach(h => {
+      const anchor = document.createElement('a');
+      anchor.href = '#' + h.id;
+      anchor.className = 'heading-anchor';
+      anchor.setAttribute('aria-label', 'Permalink');
+      anchor.textContent = '#';
+      h.appendChild(anchor);
+    });
+
+    // --- Code copy buttons ---
+    document.querySelectorAll('.post-content .highlight').forEach(block => {
+      const pre = block.querySelector('pre');
+      if (!pre) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'code-copy';
+      btn.setAttribute('aria-label', '复制代码');
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="8" height="10" rx="1.5"/><path d="M4 4V3a1 1 0 011-1h6a1 1 0 011 1v1"/></svg><span>复制</span>';
+      block.appendChild(btn);
+      btn.addEventListener('click', async () => {
+        const text = pre.textContent || '';
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.classList.add('copied');
+          btn.querySelector('span').textContent = '已复制';
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.querySelector('span').textContent = '复制';
+          }, 1800);
+        } catch (e) {
+          btn.querySelector('span').textContent = '失败';
+        }
+      });
+    });
+
+    // --- TOC: bail if too few headings ---
     if (headings.length < 4) {
       tocPanel?.remove();
       toggle?.remove();
@@ -65,34 +126,89 @@ layout: default
       return;
     }
 
-    // --- TOC: build list ---
-    const toc = document.getElementById('toc');
-    const ul = document.createElement('ul');
-    const linkById = new Map();
-    headings.forEach(h => {
-      const li = document.createElement('li');
-      li.className = 'toc-' + h.tagName.toLowerCase();
-      const a = document.createElement('a');
-      a.href = '#' + h.id;
-      a.textContent = h.textContent;
-      li.appendChild(a);
-      ul.appendChild(li);
-      linkById.set(h.id, a);
-    });
-    toc.appendChild(ul);
+    // --- TOC: build nested tree from heading levels ---
+    function buildTree(items) {
+      const root = { level: 1, children: [] };
+      const stack = [root];
+      for (const h of items) {
+        const level = parseInt(h.tagName.charAt(1), 10);
+        const node = { level, heading: h, children: [] };
+        while (stack[stack.length - 1].level >= level) stack.pop();
+        stack[stack.length - 1].children.push(node);
+        stack.push(node);
+      }
+      return root.children;
+    }
 
-    // --- TOC: scroll-spy with active-item auto-scroll ---
+    const linkById = new Map();
+    const liById = new Map();
+
+    function renderTree(nodes) {
+      const ul = document.createElement('ul');
+      for (const node of nodes) {
+        const li = document.createElement('li');
+        li.className = 'toc-h' + node.level;
+        liById.set(node.heading.id, li);
+
+        const row = document.createElement('div');
+        row.className = 'toc-row';
+
+        const hasChildren = node.children.length > 0;
+        if (hasChildren) {
+          const chev = document.createElement('button');
+          chev.type = 'button';
+          chev.className = 'toc-chevron';
+          chev.setAttribute('aria-label', '展开 / 折叠');
+          chev.innerHTML = '<svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg>';
+          chev.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            li.classList.toggle('expanded');
+          });
+          row.appendChild(chev);
+        } else {
+          const spacer = document.createElement('span');
+          spacer.className = 'toc-spacer';
+          row.appendChild(spacer);
+        }
+
+        const a = document.createElement('a');
+        a.href = '#' + node.heading.id;
+        a.textContent = node.heading.textContent.replace(/#\s*$/, '');
+        // Clicking a parent link also expands its children for context
+        if (hasChildren) {
+          a.addEventListener('click', () => li.classList.add('expanded'));
+        }
+        row.appendChild(a);
+        linkById.set(node.heading.id, a);
+
+        li.appendChild(row);
+        if (hasChildren) li.appendChild(renderTree(node.children));
+        ul.appendChild(li);
+      }
+      return ul;
+    }
+
+    const tocNav = document.getElementById('toc');
+    tocNav.appendChild(renderTree(buildTree(headings)));
+
+    // --- Scroll-spy with auto-expand + auto-scroll ---
     let activeLink = null;
+    const expandAncestors = (a) => {
+      let el = a.closest('li');
+      while (el) {
+        el.classList.add('expanded');
+        el = el.parentElement?.closest('li');
+      }
+    };
     const ensureLinkVisible = (a) => {
-      const container = tocPanel;
-      if (!container) return;
-      const cRect = container.getBoundingClientRect();
+      const cRect = tocPanel.getBoundingClientRect();
       const lRect = a.getBoundingClientRect();
       const margin = 24;
       if (lRect.top < cRect.top + margin) {
-        container.scrollBy({ top: lRect.top - cRect.top - margin, behavior: 'smooth' });
+        tocPanel.scrollBy({ top: lRect.top - cRect.top - margin, behavior: 'smooth' });
       } else if (lRect.bottom > cRect.bottom - margin) {
-        container.scrollBy({ top: lRect.bottom - cRect.bottom + margin, behavior: 'smooth' });
+        tocPanel.scrollBy({ top: lRect.bottom - cRect.bottom + margin, behavior: 'smooth' });
       }
     };
     const setActive = (a) => {
@@ -100,6 +216,7 @@ layout: default
       if (activeLink) activeLink.classList.remove('active');
       if (a) {
         a.classList.add('active');
+        expandAncestors(a);
         ensureLinkVisible(a);
       }
       activeLink = a;
@@ -111,10 +228,7 @@ layout: default
       if (visible.length > 0) {
         setActive(linkById.get(visible[0].target.id));
       }
-    }, {
-      rootMargin: '-90px 0px -75% 0px',
-      threshold: 0,
-    });
+    }, { rootMargin: '-90px 0px -75% 0px', threshold: 0 });
     headings.forEach(h => observer.observe(h));
 
     // --- Mobile drawer ---
@@ -136,7 +250,7 @@ layout: default
       tocPanel.classList.contains('open') ? closeDrawer() : openDrawer();
     });
     backdrop?.addEventListener('click', closeDrawer);
-    toc.addEventListener('click', (e) => {
+    tocNav.addEventListener('click', (e) => {
       if (e.target.tagName === 'A' && window.matchMedia('(max-width: 1100px)').matches) {
         closeDrawer();
       }
