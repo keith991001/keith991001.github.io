@@ -259,4 +259,56 @@ layout: default
       if (e.key === 'Escape' && tocPanel.classList.contains('open')) closeDrawer();
     });
   })();
+
+  // === Mermaid diagrams (lazy-load only when present) ===
+  (function () {
+    const blocks = Array.from(document.querySelectorAll(
+      '.post-content code.language-mermaid, .post-content pre > code.language-mermaid'
+    ));
+    if (blocks.length === 0) return;
+
+    // Snapshot source text + wrapper before mutating DOM
+    const pending = blocks.map(code => {
+      const wrapper = code.closest('div.highlighter-rouge') || code.closest('pre');
+      return { wrapper, source: code.textContent };
+    }).filter(p => p.wrapper);
+
+    if (pending.length === 0) return;
+
+    import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs')
+      .then(({ default: mermaid }) => {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'default',
+          securityLevel: 'loose',
+          fontFamily: 'inherit',
+          flowchart: { curve: 'basis' },
+        });
+        pending.forEach(({ wrapper, source }) => {
+          const div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = source;
+          wrapper.replaceWith(div);
+        });
+        return mermaid.run({ querySelector: '.post-content .mermaid' });
+      })
+      .catch(err => console.error('[mermaid] failed:', err));
+  })();
+
+  // === Image lightbox (medium-zoom, lazy) ===
+  (function () {
+    const images = document.querySelectorAll('.post-content img');
+    if (images.length === 0) return;
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js';
+    script.async = true;
+    script.onload = () => {
+      window.mediumZoom?.('.post-content img', {
+        background: 'rgba(15, 15, 15, 0.92)',
+        margin: 48,
+        scrollOffset: 0,
+      });
+    };
+    document.body.appendChild(script);
+  })();
 </script>

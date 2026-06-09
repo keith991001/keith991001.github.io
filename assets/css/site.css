@@ -764,6 +764,30 @@ main.container:has(.post-layout) {
 .post-meta-updated {
   color: var(--gray-600);
 }
+
+/* Mermaid diagrams */
+.post-content .mermaid {
+  margin: 1.6rem auto;
+  text-align: center;
+  overflow-x: auto;
+  line-height: 1.4;
+}
+.post-content .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Image lightbox affordance — cursor + smooth zoom feel.
+   medium-zoom overrides cursor at runtime; this is a fallback. */
+.post-content img {
+  cursor: zoom-in;
+}
+.medium-zoom-overlay {
+  z-index: 250;
+}
+.medium-zoom-image--opened {
+  z-index: 251;
+}
 .post-content blockquote {
   border-left: 3px solid var(--gray-300);
   margin: 1rem 0;
