@@ -1,6 +1,8 @@
 ---
 layout: default
 ---
+<div class="reading-progress" aria-hidden="true"></div>
+
 <div class="post-layout">
   <article class="post">
     <header class="post-header">
@@ -21,14 +23,49 @@ layout: default
   </aside>
 </div>
 
+<button class="toc-toggle" type="button" aria-label="目录" aria-expanded="false" aria-controls="toc" hidden>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+    <line x1="4" y1="6" x2="16" y2="6" />
+    <line x1="4" y1="10" x2="16" y2="10" />
+    <line x1="4" y1="14" x2="12" y2="14" />
+  </svg>
+</button>
+<div class="toc-backdrop" hidden></div>
+
 <script>
   (function () {
     const headings = Array.from(document.querySelectorAll('.post-content h2, .post-content h3'))
       .filter(h => h.id);
+    const tocPanel = document.querySelector('.post-toc');
+    const toggle = document.querySelector('.toc-toggle');
+    const backdrop = document.querySelector('.toc-backdrop');
+    const progress = document.querySelector('.reading-progress');
+
+    // --- Reading progress (always-on for posts) ---
+    const article = document.querySelector('.post-content');
+    if (progress && article) {
+      const updateProgress = () => {
+        const articleTop = article.getBoundingClientRect().top + window.scrollY;
+        const articleHeight = article.offsetHeight;
+        const viewportBottom = window.scrollY + window.innerHeight;
+        const read = Math.max(0, Math.min(articleHeight, viewportBottom - articleTop));
+        const pct = articleHeight > 0 ? (read / articleHeight) * 100 : 0;
+        progress.style.transform = `scaleX(${pct / 100})`;
+      };
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      window.addEventListener('resize', updateProgress);
+      updateProgress();
+    }
+
+    // --- TOC: bail out if too few headings ---
     if (headings.length < 4) {
-      document.querySelector('.post-toc')?.remove();
+      tocPanel?.remove();
+      toggle?.remove();
+      backdrop?.remove();
       return;
     }
+
+    // --- TOC: build list ---
     const toc = document.getElementById('toc');
     const ul = document.createElement('ul');
     const linkById = new Map();
@@ -44,16 +81,30 @@ layout: default
     });
     toc.appendChild(ul);
 
-    // Scroll-spy: highlight active section as user scrolls
+    // --- TOC: scroll-spy with active-item auto-scroll ---
     let activeLink = null;
+    const ensureLinkVisible = (a) => {
+      const container = tocPanel;
+      if (!container) return;
+      const cRect = container.getBoundingClientRect();
+      const lRect = a.getBoundingClientRect();
+      const margin = 24;
+      if (lRect.top < cRect.top + margin) {
+        container.scrollBy({ top: lRect.top - cRect.top - margin, behavior: 'smooth' });
+      } else if (lRect.bottom > cRect.bottom - margin) {
+        container.scrollBy({ top: lRect.bottom - cRect.bottom + margin, behavior: 'smooth' });
+      }
+    };
     const setActive = (a) => {
       if (activeLink === a) return;
       if (activeLink) activeLink.classList.remove('active');
-      if (a) a.classList.add('active');
+      if (a) {
+        a.classList.add('active');
+        ensureLinkVisible(a);
+      }
       activeLink = a;
     };
     const observer = new IntersectionObserver((entries) => {
-      // Find the topmost heading currently in the active zone
       const visible = entries
         .filter(e => e.isIntersecting)
         .sort((a, b) => a.target.offsetTop - b.target.offsetTop);
@@ -61,9 +112,37 @@ layout: default
         setActive(linkById.get(visible[0].target.id));
       }
     }, {
-      rootMargin: '-80px 0px -75% 0px',
+      rootMargin: '-90px 0px -75% 0px',
       threshold: 0,
     });
     headings.forEach(h => observer.observe(h));
+
+    // --- Mobile drawer ---
+    if (toggle) toggle.hidden = false;
+    if (backdrop) backdrop.hidden = false;
+    const openDrawer = () => {
+      tocPanel.classList.add('open');
+      backdrop.classList.add('show');
+      toggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    };
+    const closeDrawer = () => {
+      tocPanel.classList.remove('open');
+      backdrop.classList.remove('show');
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    };
+    toggle?.addEventListener('click', () => {
+      tocPanel.classList.contains('open') ? closeDrawer() : openDrawer();
+    });
+    backdrop?.addEventListener('click', closeDrawer);
+    toc.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A' && window.matchMedia('(max-width: 1100px)').matches) {
+        closeDrawer();
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && tocPanel.classList.contains('open')) closeDrawer();
+    });
   })();
 </script>

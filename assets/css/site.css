@@ -69,6 +69,14 @@ h3 {
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color: var(--text);
@@ -486,7 +494,73 @@ main.container:has(.post-layout) {
 }
 @media (max-width: 1100px) {
   .post-layout { grid-template-columns: 1fr; }
-  .post-toc { display: none; }
+  .post-toc {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: min(320px, 85vw);
+    height: 100vh;
+    max-height: 100vh;
+    background: var(--bg);
+    border-right: 1px solid var(--gray-200);
+    padding: 4.5rem 1rem 2rem 1.5rem;
+    margin: 0;
+    transform: translateX(-100%);
+    transition: transform var(--motion-base) ease;
+    z-index: 200;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.06);
+    overflow-y: auto;
+  }
+  .post-toc.open { transform: translateX(0); }
+}
+.toc-toggle {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--ink, #1a1a1a);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  z-index: 150;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--motion-fast) ease, background var(--motion-fast) ease;
+}
+.toc-toggle:hover { transform: translateY(-2px); }
+.toc-toggle:active { transform: translateY(0); }
+@media (max-width: 1100px) {
+  .toc-toggle { display: flex; }
+}
+.toc-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 199;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-base) ease;
+}
+.toc-backdrop.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent);
+  transform-origin: left center;
+  transform: scaleX(0);
+  z-index: 101;
+  pointer-events: none;
+  will-change: transform;
 }
 .post-toc-title {
   font-size: 0.82rem;
