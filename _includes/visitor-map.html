@@ -1,7 +1,7 @@
   <section class="visitor-section">
     <h2 class="visitor-title">Recent Visitors</h2>
     <p class="visitor-privacy">
-      Showing approximate country-level locations of visitors. No IP addresses are stored.
+      Showing approximate region-level locations of visitors. No IP addresses are stored.
     </p>
 
     <div class="visitor-choropleth" id="visitor-choropleth">
@@ -17,7 +17,7 @@
     <table class="visitor-table">
       <thead>
         <tr>
-          <th>Country</th>
+          <th>Region</th>
           <th class="num">Visits</th>
           <th class="num">Locations</th>
           <th>Last Visit</th>
@@ -158,8 +158,15 @@
 
     let regionNames;
     try { regionNames = new Intl.DisplayNames(['en'], { type: 'region' }); } catch (e) {}
+    // SAR / disputed regions: render with parent country to avoid implying nation status
+    const REGION_LABEL_OVERRIDES = {
+      'TW': 'Taiwan, China',
+      'HK': 'Hong Kong, China',
+      'MO': 'Macao, China',
+    };
     function nameFor(code) {
       if (!code || code === 'XX') return 'Unknown';
+      if (REGION_LABEL_OVERRIDES[code]) return REGION_LABEL_OVERRIDES[code];
       try { return regionNames ? regionNames.of(code) : code; } catch (e) { return code; }
     }
 
@@ -273,9 +280,9 @@
         ).join('');
 
         const total = visits.length;
-        const countries = rows.length;
+        const regions = rows.length;
         document.getElementById('visitor-count').textContent =
-          total + ' visits from ' + countries + ' countr' + (countries === 1 ? 'y' : 'ies');
+          total + ' visits from ' + regions + ' region' + (regions === 1 ? '' : 's');
 
         // 动态生成的国旗也用 Twemoji 处理（兼容 Windows）
         if (typeof twemoji !== 'undefined') {
