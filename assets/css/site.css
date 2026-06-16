@@ -826,6 +826,22 @@ main.container:has(.post-layout) {
 .post-content tbody tr:last-child td {
   border-bottom: none;
 }
+/* Short label columns (typically first) shouldn't be forced to wrap.
+   width:1% + nowrap collapses the column to natural content width,
+   leaving remaining space for the content column(s). */
+.post-content thead th:first-child,
+.post-content tbody td:first-child {
+  white-space: nowrap;
+  width: 1%;
+}
+/* On narrow screens allow wrapping again so the table doesn't blow out the page. */
+@media (max-width: 600px) {
+  .post-content thead th:first-child,
+  .post-content tbody td:first-child {
+    white-space: normal;
+    width: auto;
+  }
+}
 
 /* ====== Projects ====== */
 .project-list {
