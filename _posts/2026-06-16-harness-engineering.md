@@ -2,7 +2,7 @@
 title: "Harness Engineering"
 date: 2026-06-16
 category: AI
-cover: /assets/images/posts/Harness%20Engineering/image1.png
+cover: /assets/images/posts/Harness%20Engineering/cover.png
 ---
 
 ## Intro
