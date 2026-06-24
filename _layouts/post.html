@@ -24,10 +24,23 @@ layout: default
   </article>
 
   <aside class="post-toc" aria-label="Table of contents">
-    <h2 class="post-toc-title">目录</h2>
+    <div class="post-toc-head">
+      <h2 class="post-toc-title">目录</h2>
+      <button class="toc-collapse" type="button" aria-label="收起目录" title="收起目录">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 3L5 8l5 5"/>
+        </svg>
+      </button>
+    </div>
     <nav id="toc"></nav>
   </aside>
 </div>
+
+<button class="toc-expand" type="button" aria-label="展开目录" title="展开目录" hidden>
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 3l5 5-5 5"/>
+  </svg>
+</button>
 
 <button class="toc-toggle" type="button" aria-label="目录" aria-expanded="false" aria-controls="toc" hidden>
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
@@ -257,6 +270,32 @@ layout: default
     });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && tocPanel.classList.contains('open')) closeDrawer();
+    });
+
+    // --- Desktop collapse/expand (>1100px only) ---
+    const layout = document.querySelector('.post-layout');
+    const collapseBtn = document.querySelector('.toc-collapse');
+    const expandBtn = document.querySelector('.toc-expand');
+    const STORAGE_KEY = 'toc-collapsed';
+    const isDesktop = () => window.matchMedia('(min-width: 1101px)').matches;
+    const applyCollapsed = (collapsed) => {
+      if (!layout) return;
+      layout.classList.toggle('toc-hidden', collapsed);
+      if (expandBtn) expandBtn.hidden = !collapsed;
+    };
+    // Restore preference on load (only when desktop)
+    if (isDesktop()) {
+      try {
+        if (localStorage.getItem(STORAGE_KEY) === '1') applyCollapsed(true);
+      } catch (e) {}
+    }
+    collapseBtn?.addEventListener('click', () => {
+      applyCollapsed(true);
+      try { localStorage.setItem(STORAGE_KEY, '1'); } catch (e) {}
+    });
+    expandBtn?.addEventListener('click', () => {
+      applyCollapsed(false);
+      try { localStorage.setItem(STORAGE_KEY, '0'); } catch (e) {}
     });
   })();
 
