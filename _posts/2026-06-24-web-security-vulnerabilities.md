@@ -2,6 +2,7 @@
 title: "Web Security Vulnerabilities"
 date: 2026-06-24
 category: Computer
+cover: /assets/images/posts/web-security-vulnerabilities/cover.png
 ---
 
 ## 一、XSS（跨站脚本）
