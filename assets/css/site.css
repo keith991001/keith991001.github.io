@@ -483,6 +483,21 @@ main.container:has(.post-layout) {
 }
 .post-layout > .post-toc { order: 1; }
 .post-layout > article.post { order: 2; }
+/* Collapsed-TOC state (desktop only): hide sidebar, re-center article at
+   its natural width so prose stays at a readable line length. */
+@media (min-width: 1101px) {
+  .post-layout.toc-hidden {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .post-layout.toc-hidden > .post-toc {
+    display: none;
+  }
+  .post-layout.toc-hidden > article.post {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
 .post-toc {
   position: sticky;
   top: 90px;
@@ -562,13 +577,68 @@ main.container:has(.post-layout) {
   pointer-events: none;
   will-change: transform;
 }
+.post-toc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 0.4rem;
+  margin: 0 0 1rem;
+}
 .post-toc-title {
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--ink);
-  margin: 0 0 1rem;
+  margin: 0;
   padding-left: 0.85rem;
   font-family: var(--font-display);
+}
+/* Collapse button in TOC head (desktop only) */
+.toc-collapse {
+  background: none;
+  border: none;
+  color: var(--gray-500);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--motion-fast) ease, background var(--motion-fast) ease;
+}
+.toc-collapse:hover {
+  color: var(--ink);
+  background: var(--gray-100);
+}
+@media (max-width: 1100px) {
+  .toc-collapse { display: none; }
+}
+/* Floating expand button on left edge when TOC is collapsed (desktop only) */
+.toc-expand {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 56px;
+  border-radius: 0 8px 8px 0;
+  background: var(--bg);
+  border: 1px solid var(--gray-200);
+  border-left: none;
+  color: var(--gray-600);
+  cursor: pointer;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.06);
+  transition: color var(--motion-fast) ease, background var(--motion-fast) ease;
+}
+.toc-expand:hover {
+  color: var(--ink);
+  background: var(--gray-100);
+}
+@media (max-width: 1100px) {
+  .toc-expand { display: none !important; }
 }
 .post-toc nav ul {
   list-style: none;
