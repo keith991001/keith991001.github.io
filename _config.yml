@@ -20,6 +20,9 @@ collections:
     output: false
   projects:
     output: false
+  daily:
+    output: false
+    sort_by: date
 
 defaults:
   - scope:
