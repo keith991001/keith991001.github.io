@@ -1452,6 +1452,18 @@ footer {
   padding: 0.1rem 0 0.1rem 0.9rem;
   color: var(--gray-700);
 }
+.daily-day-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: 0.7rem 0;
+}
+/* When multiple images appear in the same thought, tighten their vertical
+   rhythm so they group visually. */
+.daily-day-body p:has(> img):has(+ p:has(> img)) img {
+  margin-bottom: 0.35rem;
+}
 
 /* Responsive */
 @media (max-width: 600px) {
