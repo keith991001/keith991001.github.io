@@ -19,16 +19,15 @@ JST = timezone(timedelta(hours=9))
 DAILY_DIR = Path("_daily")
 IMG_DIR_BASE = Path("assets/images/daily")
 
-# Match ![alt](url) where url is a GitHub-hosted image (either legacy
-# user-images CDN, the newer user-attachments URL, or a raw.githubusercontent
-# pointer that a user might paste in).
-GH_IMG_RE = re.compile(
-    r'!\[([^\]]*)\]\('
-    r'(https://(?:user-images\.githubusercontent\.com'
-    r'|github\.com/user-attachments'
-    r'|raw\.githubusercontent\.com)[^)\s]+)'
-    r'\)'
-)
+# GitHub image URL host patterns we want to self-host.
+GH_HOST_RE = r'https://(?:user-images\.githubusercontent\.com|github\.com/user-attachments|raw\.githubusercontent\.com|private-user-images\.githubusercontent\.com)[^"\'\s)]+'
+
+# Standard markdown embed: ![alt](url)
+GH_IMG_MD_RE = re.compile(rf'!\[([^\]]*)\]\(({GH_HOST_RE})\)')
+
+# HTML <img> tag with src pointing at a GitHub host — GitHub now inserts
+# these instead of markdown when you drag/paste an image into the issue.
+GH_IMG_HTML_RE = re.compile(r'<img\b[^>]*/?>', re.IGNORECASE)
 
 
 def _guess_ext(url: str) -> str:
@@ -55,23 +54,48 @@ def _download(url: str, dest_dir: Path) -> str:
     return '/' + target.as_posix()
 
 
-def rewrite_images(body: str, date_str: str) -> str:
-    """Replace any GitHub-hosted image URLs in the body with local paths.
+def _try_dl(url: str, dest_dir: Path) -> str | None:
+    try:
+        local = _download(url, dest_dir)
+        print(f'  ↳ downloaded {url} → {local}')
+        return local
+    except Exception as e:
+        print(f'  ↳ WARN: could not fetch {url}: {e}', file=sys.stderr)
+        return None
 
-    If download fails, the original URL is kept so the entry still renders."""
+
+def rewrite_images(body: str, date_str: str) -> str:
+    """Replace GitHub-hosted image URLs in the body with local paths.
+
+    Handles both markdown embeds (![alt](url)) and HTML <img src=...> tags
+    (GitHub inserts <img> when you drag/paste an image into an issue).
+    Both formats are normalised to markdown pointing at a local asset.
+
+    Falls back to the original text if download fails."""
     dest_dir = IMG_DIR_BASE / date_str
 
-    def _repl(m: re.Match) -> str:
+    def md_repl(m: re.Match) -> str:
         alt, url = m.group(1), m.group(2)
-        try:
-            local = _download(url, dest_dir)
-            print(f'  ↳ downloaded {url} → {local}')
-            return f'![{alt}]({local})'
-        except Exception as e:
-            print(f'  ↳ WARN: could not fetch {url}: {e}', file=sys.stderr)
-            return m.group(0)
+        local = _try_dl(url, dest_dir)
+        return f'![{alt}]({local})' if local else m.group(0)
 
-    return GH_IMG_RE.sub(_repl, body)
+    def html_repl(m: re.Match) -> str:
+        tag = m.group(0)
+        src_m = re.search(r'\bsrc=["\']([^"\']+)["\']', tag)
+        if not src_m:
+            return tag
+        url = src_m.group(1)
+        # Only self-host GitHub-hosted URLs; leave external images alone
+        if not re.search(r'(user-attachments|githubusercontent)', url):
+            return tag
+        alt_m = re.search(r'\balt=["\']([^"\']*)["\']', tag)
+        alt = alt_m.group(1) if alt_m else ''
+        local = _try_dl(url, dest_dir)
+        return f'![{alt}]({local})' if local else tag
+
+    body = GH_IMG_MD_RE.sub(md_repl, body)
+    body = GH_IMG_HTML_RE.sub(html_repl, body)
+    return body
 
 
 def main() -> int:
