@@ -23,7 +23,9 @@ layout: default
     </div>
   </article>
 
-  <aside class="post-toc" aria-label="Table of contents" data-max-level="{{ page.toc_max_level | default: 5 }}">
+  <aside class="post-toc" aria-label="Table of contents"
+         data-min-level="{{ page.toc_min_level | default: 2 }}"
+         data-max-level="{{ page.toc_max_level | default: 5 }}">
     <div class="post-toc-head">
       <h2 class="post-toc-title">目录</h2>
       <button class="toc-collapse" type="button" aria-label="收起目录" title="收起目录">
@@ -60,13 +62,16 @@ layout: default
 
 <script>
   (function () {
-    // Cap TOC depth via `page.toc_max_level` frontmatter (default: h5).
-    // Also skip any heading inside a `.no-toc` container (e.g. the inline
-    // question summary at the top of interview-style posts).
-    const maxLevel = Math.max(2, Math.min(6, parseInt(
-      document.querySelector('.post-toc')?.dataset.maxLevel || '5', 10)));
+    // Which heading levels the TOC should include. Controlled by
+    // `page.toc_min_level` / `page.toc_max_level` frontmatter. Also skip
+    // any heading inside a `.no-toc` container (e.g. the inline question
+    // summary at the top of interview-style posts).
+    const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
+    const tocEl = document.querySelector('.post-toc');
+    const minLevel = clamp(parseInt(tocEl?.dataset.minLevel || '2', 10), 2, 6);
+    const maxLevel = clamp(parseInt(tocEl?.dataset.maxLevel || '5', 10), minLevel, 6);
     const levelSel = [];
-    for (let l = 2; l <= maxLevel; l++) levelSel.push(`.post-content h${l}`);
+    for (let l = minLevel; l <= maxLevel; l++) levelSel.push(`.post-content h${l}`);
     const SELECTOR = levelSel.join(', ');
     const headings = Array.from(document.querySelectorAll(SELECTOR))
       .filter(h => h.id && !h.closest('.no-toc'));
