@@ -23,7 +23,7 @@ layout: default
     </div>
   </article>
 
-  <aside class="post-toc" aria-label="Table of contents">
+  <aside class="post-toc" aria-label="Table of contents" data-max-level="{{ page.toc_max_level | default: 5 }}">
     <div class="post-toc-head">
       <h2 class="post-toc-title">目录</h2>
       <button class="toc-collapse" type="button" aria-label="收起目录" title="收起目录">
@@ -60,8 +60,16 @@ layout: default
 
 <script>
   (function () {
-    const SELECTOR = '.post-content h2, .post-content h3, .post-content h4, .post-content h5';
-    const headings = Array.from(document.querySelectorAll(SELECTOR)).filter(h => h.id);
+    // Cap TOC depth via `page.toc_max_level` frontmatter (default: h5).
+    // Also skip any heading inside a `.no-toc` container (e.g. the inline
+    // question summary at the top of interview-style posts).
+    const maxLevel = Math.max(2, Math.min(6, parseInt(
+      document.querySelector('.post-toc')?.dataset.maxLevel || '5', 10)));
+    const levelSel = [];
+    for (let l = 2; l <= maxLevel; l++) levelSel.push(`.post-content h${l}`);
+    const SELECTOR = levelSel.join(', ');
+    const headings = Array.from(document.querySelectorAll(SELECTOR))
+      .filter(h => h.id && !h.closest('.no-toc'));
     const tocPanel = document.querySelector('.post-toc');
     const toggle = document.querySelector('.toc-toggle');
     const backdrop = document.querySelector('.toc-backdrop');
@@ -96,7 +104,12 @@ layout: default
     }
 
     // --- Heading anchor links ---
-    headings.forEach(h => {
+    // Anchor every h2-h5 in the article body (regardless of TOC depth cap),
+    // but skip anything inside .no-toc (e.g. the inline question summary).
+    document.querySelectorAll(
+      '.post-content h2, .post-content h3, .post-content h4, .post-content h5'
+    ).forEach(h => {
+      if (!h.id || h.closest('.no-toc')) return;
       const anchor = document.createElement('a');
       anchor.href = '#' + h.id;
       anchor.className = 'heading-anchor';
