@@ -5,7 +5,7 @@ title: About
 
 <header class="about-hero">
   <h1>Ke Yu</h1>
-  <p class="about-tagline">Software Engineer at GMO Pepabo</p>
+  <p class="about-tagline">AI Engineer </p>
   <p class="about-contact">
     <a href="mailto:keith991001@gmail.com" aria-label="Email" title="keith991001@gmail.com">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
