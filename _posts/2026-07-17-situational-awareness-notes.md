@@ -1,7 +1,8 @@
 ---
-title: "Situational Awareness: The Decade Ahead — 全系列按章笔记"
+title: "Situational Awareness"
 date: 2026-07-17
-category: AI
+category: Finance
+cover: /assets/images/posts/situational-awareness/cover.png
 toc_min_level: 2
 toc_max_level: 3
 ---
