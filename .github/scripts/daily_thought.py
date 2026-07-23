@@ -102,6 +102,7 @@ def main() -> int:
     body = os.environ.get("ISSUE_BODY", "").strip()
     title = os.environ.get("ISSUE_TITLE", "").strip()
     created_at = os.environ["ISSUE_CREATED_AT"]
+    issue_number = os.environ.get("ISSUE_NUMBER", "").strip()
 
     if not body:
         print("Empty body — skipping.")
@@ -135,10 +136,19 @@ def main() -> int:
     DAILY_DIR.mkdir(exist_ok=True)
     target = DAILY_DIR / f"{date_str}.md"
 
-    entry = f"\n## {time_str}\n\n{content}\n"
+    # Idempotency backstop: tag each entry with an invisible marker keyed by
+    # issue number. If the workflow ever fires more than once for the same
+    # issue (e.g. GitHub emitting duplicate events), the second run sees the
+    # marker already present and skips — so an issue can never be published
+    # twice. The marker is an HTML comment, invisible in the rendered page.
+    marker = f"<!-- issue:{issue_number} -->" if issue_number else ""
+    entry = f"\n{marker}\n\n## {time_str}\n\n{content}\n"
 
     if target.exists():
         existing = target.read_text(encoding="utf-8")
+        if marker and marker in existing:
+            print(f"Issue #{issue_number} already published in {target} — skipping.")
+            return 0
         target.write_text(existing.rstrip() + "\n" + entry, encoding="utf-8")
         print(f"Appended to {target}")
     else:

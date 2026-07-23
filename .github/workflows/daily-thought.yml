@@ -2,16 +2,20 @@ name: Daily Thought
 
 on:
   issues:
-    types: [opened, labeled]
+    # Only "labeled": applying the `daily` label is the explicit publish action.
+    # Listening to "opened" too would double-fire when an issue is created with
+    # the label already selected (GitHub emits both events), producing a
+    # duplicate entry. The script is also idempotent per issue as a backstop.
+    types: [labeled]
 
 # Only run when:
-# 1) the issue is labelled "daily", AND
+# 1) the label just applied is "daily", AND
 # 2) the issue author is the repo owner (so random visitors can't publish
 #    to the site even if they somehow get the label applied).
 jobs:
   publish:
     if: |
-      contains(github.event.issue.labels.*.name, 'daily') &&
+      github.event.label.name == 'daily' &&
       github.event.issue.user.login == github.repository_owner
     runs-on: ubuntu-latest
     permissions:
@@ -27,6 +31,7 @@ jobs:
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_CREATED_AT: ${{ github.event.issue.created_at }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: python3 .github/scripts/daily_thought.py
 
       - name: Commit & push
