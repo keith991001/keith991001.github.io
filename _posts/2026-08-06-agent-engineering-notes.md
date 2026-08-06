@@ -1,7 +1,8 @@
 ---
-title: "AI Agent Stage0"
+title: "homework_agent stage0"
 date: 2026-08-06
 category: AI
+cover: /assets/images/posts/agent-engineering-notes/cover.png
 ---
 
 
