@@ -43,12 +43,16 @@ permalink: /experiences/
       <span class="entry-date">Apr 2026 – Present</span>
     </div>
     <div class="entry-meta">Tokyo</div>
-    <ul class="entry-points">
-      <li>Redesigned checkout to reserve stock before payment with timed auto-release, eliminating "paid but out of stock" during flash sales.</li>
-      <li>Removed deadlocks and cut checkout failure rate 11.3%→9.9% under 50-concurrent load tests; shipped to production.</li>
-      <li>Built end-to-end credit card payment (fincode): saved-card management with 3D Secure, subscription billing, and actionable payment-error messaging.</li>
-      <li>Integrated 4 payment methods across 27 API clients; added automated payment-flow tests.</li>
-    </ul>
+    <h3>High-Traffic Checkout Redesign</h3>
+      <ul class="entry-points">
+        <li>Redesigned checkout to reserve stock before payment with timed auto-release, eliminating "paid but out of stock" during flash sales.</li>
+        <li>Cut checkout failure rate 11.3%→9.9% and removed deadlocks under 50-concurrent load tests; shipped to production.</li>
+      </ul>
+    <h3>Credit Card Payment System (fincode)</h3>
+      <ul class="entry-points">
+        <li>Built end-to-end card payment: saved-card management with 3D Secure, subscription billing, and actionable payment-error messaging.</li>
+        <li>Integrated 4 payment methods across 27 API clients; removed ~480 lines of duplication and added automated payment-flow tests.</li>
+      </ul>
   </div>
 </div>
 
