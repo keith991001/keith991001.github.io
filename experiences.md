@@ -54,7 +54,7 @@ permalink: /experiences/
       </div>
 
       <div class="entry-project">
-        <h3 class="entry-project-title">Credit Card Payment System <span class="entry-project-note">fincode</span></h3>
+        <h3 class="entry-project-title">Credit Card Payment System (fincode)</h3>
         <ul class="entry-points">
           <li>Built end-to-end card payment: saved-card management with 3D Secure, subscription billing, and actionable payment-error messaging.</li>
           <li>Fixed a production bug that blocked card deletion after a subscription was cancelled.</li>
