@@ -151,6 +151,9 @@ layout: default
 
     // --- TOC: bail if too few headings ---
     if (headings.length < 4) {
+      // Reuse the collapsed-TOC layout so the article gets the full column.
+      document.querySelector('.post-layout')?.classList.add('toc-hidden');
+      document.querySelector('.toc-expand')?.remove();
       tocPanel?.remove();
       toggle?.remove();
       backdrop?.remove();
