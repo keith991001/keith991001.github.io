@@ -632,6 +632,7 @@ main.container:has(.post-layout) {
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.06);
   transition: color var(--motion-fast) ease, background var(--motion-fast) ease;
 }
+.toc-expand[hidden] { display: none; }
 .toc-expand:hover {
   color: var(--ink);
   background: var(--gray-100);
