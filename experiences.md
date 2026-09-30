@@ -49,16 +49,15 @@ permalink: /experiences/
         <h3 class="entry-project-title">High-Traffic Checkout Redesign</h3>
         <ul class="entry-points">
           <li>Redesigned checkout to reserve stock before payment with timed auto-release, eliminating "paid but out of stock" during flash sales.</li>
-          <li>Cut checkout failure rate 11.3%→9.9% and removed deadlocks under 50-concurrent load tests; shipped to production.</li>
+          <li>Owned the core implementation of this cross-service change (cart / API / shared-contract repo), resolving DB lock contention under burst load; shipped to production.</li>
         </ul>
       </div>
 
       <div class="entry-project">
         <h3 class="entry-project-title">Credit Card Payment System (fincode)</h3>
         <ul class="entry-points">
-          <li>Built end-to-end card payment: saved-card management with 3D Secure, subscription billing, and actionable payment-error messaging.</li>
-          <li>Fixed a production bug that blocked card deletion after a subscription was cancelled.</li>
-          <li>Integrated 4 payment methods across 27 API clients; removed ~480 lines of duplication and added automated payment-flow tests.</li>
+          <li>Built end-to-end card payment (saved-card management with 3D Secure, subscription billing, actionable error messaging) and standardized failure handling across 27 API clients, locked in with a VCR record/replay test suite.</li>
+          <li>Fixed a production bug blocking card deletion after a subscription was cancelled, by scoping the guard to pending charges after verifying existing orders were unaffected.</li>
         </ul>
       </div>
     </div>
