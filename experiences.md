@@ -40,7 +40,7 @@ permalink: /experiences/
   <div class="entry-body">
     <div class="entry-header">
       <span class="entry-title">Software Development Engineer · GMO Pepabo</span>
-      <span class="entry-date">Apr 2026 – Present</span>
+      <span class="entry-date">Apr – Oct 2026</span>
     </div>
     <div class="entry-meta">Tokyo</div>
 
